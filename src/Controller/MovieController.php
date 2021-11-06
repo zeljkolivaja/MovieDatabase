@@ -12,13 +12,11 @@ class MovieController extends AbstractController
     /**
      * @Route("/", name="app_homepage")
      */
-    public function homepage(MovieRepository $repository)
+    public function homepage()
     {
 
 
 
-        return $this->render('movie/homepage.html.twig', [
-            "movies" => $movies
-        ]);
+        return $this->render('movie/homepage.html.twig', []);
     }
 }
