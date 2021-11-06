@@ -1,0 +1,12 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	{{movie.title}}
+{% endblock %}
+
+{% block body %}
+
+	{% include ('movie/includes/rating.html.twig') %}
+
+
+{% endblock %}
