@@ -22,7 +22,7 @@ $container.find('a').on('click', function(e) {
     var $link = $(e.currentTarget);
  
     $.ajax({
-        url: '/movies/' + movieId + '/' +$link.data('score'),
+        url: '/movies/' +  slug + '/' +$link.data('score'),
         method: 'POST'
     }).then(function(data) {
         $container.find('.js-user-rating').text(data.movieRating);

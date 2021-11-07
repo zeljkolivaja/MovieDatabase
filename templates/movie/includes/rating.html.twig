@@ -38,7 +38,8 @@
 					<div>
 						<span>
 							User Score:
-							<span class="js-user-rating">{{movie.rating}}</span>
+							<span class="js-user-rating">
+							 {{movieRating}}
 						</span>
 					</div>
 				</div>
@@ -48,6 +49,6 @@
 </div>
 
 <script>
-var movieId = '{{ movie.id }}';
+var slug = '{{ movie.slug }}';
 </script>
 

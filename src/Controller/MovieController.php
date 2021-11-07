@@ -49,38 +49,49 @@ class MovieController extends AbstractController
      */
     public function show(Movie $movie, MovieRepository $repository)
     {
-        // $movie = $repository->findOneBy(['slug' => $slug]);
-
 
         if (!$movie) {
             throw $this->createNotFoundException("Movie not found");
         }
 
+        if ($movie->getRating() != 0) {
+            $movieRating = $movie->getRating() / $movie->getTotalVotes();
+            $movieRating = number_format($movieRating, 2);
+        } else {
+            $movieRating = 0;
+        }
+
         return $this->render('movie/show.html.twig', [
-            "movie" => $movie
+            "movie" => $movie,
+            "movieRating" => $movieRating
         ]);
     }
 
     /**
-     * @Route("/movies/{movieId}/{rating<1|2|3|4|5>}", name="app_rateMovie", methods="POST")
+     * @Route("/movies/{slug}/{rating<1|2|3|4|5>}", name="app_movie_rate", methods="POST")
      */
-    public function rateMovie($movieId, int $rating, MovieRepository $repository, EntityManagerInterface $entityManager)
+    public function rateMovie($slug, int $rating, EntityManagerInterface $entityManager, MovieRepository $repository)
     {
 
         //in the future prevent the single user from voting the same movie multiple times
 
-        //find movie with id coming from ajax
-        $movie = $repository->findOneBy(['id' => $movieId]);
+        //find movie with slug
+        $movie = $repository->findOneBy(['slug' => $slug]);
 
-        //get the current score of movie and calculate new score
-        $currentScore = $movie->getRating();
-        $totalVotes = $movie->getTotalVotes();
-        (float)$newScore = ($currentScore + $rating) / ($totalVotes + 1);
+
+        //calculate new rating
+        $newRating = $movie->getRating() + $rating;
+
+        //calculate new total votes
+        $newTotalVotes = $movie->getTotalVotes() + 1;
+
+        //calculate score to show the users
+        $newScore = $newRating / $newTotalVotes;
         $movieRating = number_format($newScore, 2);
 
-        //save the new score to database
-        $movie->setTotalVotes($totalVotes + 1);
-        $movie->setRating($currentScore + $rating);
+        //add new totalvotes and rating to DB
+        $movie->setTotalVotes($newTotalVotes);
+        $movie->setRating($newRating);
         $entityManager->persist($movie);
         $entityManager->flush();
 
