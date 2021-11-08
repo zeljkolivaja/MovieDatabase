@@ -48,7 +48,7 @@ class Movie
     private $slug;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $PG;
 
@@ -134,12 +134,12 @@ class Movie
         return $this;
     }
 
-    public function getPG(): ?int
+    public function getPG(): ?string
     {
         return $this->PG;
     }
 
-    public function setPG(?int $PG): self
+    public function setPG(?string $PG): self
     {
         $this->PG = $PG;
 
