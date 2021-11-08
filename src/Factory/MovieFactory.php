@@ -54,8 +54,7 @@ final class MovieFactory extends ModelFactory
             'runtime' => rand(1, 240),
             'PG' => array_rand($PG, 1),
             'rating' => 100,
-            'totalVotes' => rand(20, 100),
-            'slug' => self::faker()->slug()
+            'totalVotes' => rand(20, 100)
         ];
     }
 
