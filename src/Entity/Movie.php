@@ -2,15 +2,18 @@
 
 namespace App\Entity;
 
-use App\Repository\MovieRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use App\Repository\MovieRepository;
+
 
 /**
  * @ORM\Entity(repositoryClass=MovieRepository::class)
  */
 class Movie
 {
+    use TimestampableEntity;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
