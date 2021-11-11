@@ -22,7 +22,7 @@
 	<div class="card-group">
 		<div class="row ">
 			{% for movie in movies %}
-				<div class="col-lg-4 col-sm-12">
+   				<div class="col-lg-4 col-sm-12">
 					<div class="card">
 						<a href="{{path('app_movie_show',{slug: movie.slug} )}}"><img src="{{asset('images/img1.jpg')}}" class="card-img-top" alt="..."></a>
 						<div class="card-body">
@@ -43,6 +43,6 @@
 			{% endfor %}
 		</div>
 	</div>
-
+ 
 
 </div>{% endblock %}

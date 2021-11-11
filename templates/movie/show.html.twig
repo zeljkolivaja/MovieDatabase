@@ -8,5 +8,10 @@
 
 	{% include ('movie/includes/rating.html.twig') %}
 
+	{% for image in media %}
+	{{image.fileName}}
+		
+	{% endfor %}
+
 
 {% endblock %}
