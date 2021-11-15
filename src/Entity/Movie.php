@@ -10,6 +10,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use App\Repository\MovieRepository;
 
 
+
 /**
  * @ORM\Entity(repositoryClass=MovieRepository::class)
  */
@@ -67,11 +68,13 @@ class Movie
 
     /**
      * @ORM\OneToMany(targetEntity=Video::class, mappedBy="Movie")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $videos;
 
     /**
      * @ORM\OneToMany(targetEntity=Image::class, mappedBy="Movie")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $images;
 
@@ -80,6 +83,7 @@ class Movie
         $this->videos = new ArrayCollection();
         $this->images = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {

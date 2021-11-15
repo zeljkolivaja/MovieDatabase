@@ -53,7 +53,7 @@ final class MovieFactory extends ModelFactory
             'storyLine' => self::faker()->paragraphs('1', true),
             'runtime' => rand(1, 240),
             'PG' => array_rand($PG, 1),
-            'rating' => 100,
+            'rating' => rand(70, 100),
             'totalVotes' => rand(20, 100)
         ];
     }

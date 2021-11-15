@@ -28,7 +28,7 @@
 									<a class="nav-link active" aria-current="page" href="{{path('app_homepage')}}">Home</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="#">Link</a>
+									<a class="nav-link" href="{{path('app_explore_movies')}}">Explore Movies</a>
 								</li>
 								<li class="nav-item dropdown">
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -66,8 +66,7 @@
 
 			{% block javascripts %}
 				{{ encore_entry_script_tags('app') }}
-				<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
-				integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 			{% endblock %}
 
 		</div>

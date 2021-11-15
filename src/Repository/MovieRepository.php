@@ -24,13 +24,13 @@ class MovieRepository extends ServiceEntityRepository
     //  * @return Movie[] Returns an array of Movie objects
     //  */
 
-    public function findAllReleasedMoviesDESC($value)
+    public function findAllReleasedMoviesDESC($numberOfresults)
     {
         $qb = $this->createQueryBuilder('m');
 
         return $this->isReleased($qb)
             ->orderBy('m.releaseYear', 'DESC')
-            ->setMaxResults($value)
+            ->setMaxResults($numberOfresults)
             ->getQuery()
             ->getResult();
     }
@@ -38,6 +38,17 @@ class MovieRepository extends ServiceEntityRepository
     private function isReleased(QueryBuilder $qb): QueryBuilder
     {
         return $qb->andWhere('m.releaseYear IS NOT NULL');
+    }
+
+    public function findMostVotedMovies($numberOfresults)
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        return $this->isReleased($qb)
+            ->orderBy('m.totalVotes', 'DESC')
+            ->setMaxResults($numberOfresults)
+            ->getQuery()
+            ->getResult();
     }
 
 

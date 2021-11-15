@@ -1,0 +1,36 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Popular Movies
+{% endblock %}
+
+{% block body %}
+
+<h3>
+	Most Voted Movies
+</h3>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col">Movie Name</th>
+			<th scope="col">Number of votes</th>
+			<th scope="col">User rating</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		<tr>
+			{% for movie in movies %}
+
+				<th scope="row">1</th>
+				<td>
+					<a href="{{path('app_movie_show',{slug: movie.slug} )}}">{{movie.title}}
+					</a>
+				</td>
+				<td>{{movie.totalVotes}}</td>
+				<td>{{(movie.rating / movie.totalVotes)| number_format(2)}}</td>
+			</tr>
+		</tr>
+	</tbody>
+</tr>{% endfor %}</tbody></table>{% endblock %}

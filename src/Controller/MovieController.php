@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Movie;
 use App\Repository\MovieRepository;
-use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,6 +26,19 @@ class MovieController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/movies/popular", name="app_explore_movies")
+     */
+    public function exploreMovies(MovieRepository $repository)
+    {
+        //TODO most voted movies/ best rated movies, best rated movies by genre, newest movies
+        $movies = $repository->findMostVotedMovies(10);
+
+        return $this->render('movie/explore.html.twig', [
+            'movies' => $movies
+        ]);
+    }
+
 
     /**
      * @Route("/movies/new", name="app_movie_new")
@@ -34,13 +46,13 @@ class MovieController extends AbstractController
     public function new(EntityManagerInterface $entityManager)
     {
 
-        $movie = new Movie();
-        $movie->setTitle("Test Movie");
-        $movie->setSlug("test-movie-" . rand(0, 1000));
-        $movie->setReleaseYear(new DateTime("now"));
-        $entityManager->persist($movie);
-        $entityManager->flush();
-        return new Response("movie added");
+        // $movie = new Movie();
+        // $movie->setTitle("Test Movie");
+        // $movie->setSlug("test-movie-" . rand(0, 1000));
+        // $movie->setReleaseYear(new DateTime("now"));
+        // $entityManager->persist($movie);
+        // $entityManager->flush();
+        // return new Response("movie added");
     }
 
 
@@ -61,13 +73,11 @@ class MovieController extends AbstractController
             $movieRating = 0;
         }
 
-        $media = $movie->getMedia();
 
 
         return $this->render('movie/show.html.twig', [
             "movie" => $movie,
             "movieRating" => $movieRating,
-            "media" => $media
         ]);
     }
 
