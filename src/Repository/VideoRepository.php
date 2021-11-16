@@ -36,6 +36,19 @@ class VideoRepository extends ServiceEntityRepository
     }
     */
 
+    public function findLatestVideos($numberOfresults)
+    {
+
+        return $this->createQueryBuilder('video')
+            ->orderBy('video.createdAt', 'DESC')
+            ->innerJoin('video.Movie', 'movie')
+            ->addSelect('movie')
+            ->setMaxResults($numberOfresults)
+            ->getQuery()
+            ->getResult();
+    }
+
+
     /*
     public function findOneBySomeField($value): ?Video
     {

@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Movie;
 use App\Repository\MovieRepository;
+use App\Repository\VideoRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class MovieController extends AbstractController
 {
@@ -27,39 +29,42 @@ class MovieController extends AbstractController
     }
 
     /**
-     * @Route("/movies/popular", name="app_explore_movies")
+     * @Route("/movies/explore", name="app_movie_explore")
      */
-    public function exploreMovies(MovieRepository $repository)
+    public function exploreMovies(MovieRepository $repository, VideoRepository $videos)
     {
         //TODO most voted movies/ best rated movies, best rated movies by genre, newest movies
         $movies = $repository->findMostVotedMovies(10);
+        $trailers =  $videos->findLatestVideos(4);
 
         return $this->render('movie/explore.html.twig', [
-            'movies' => $movies
+            'movies' => $movies,
+            'trailers' => $trailers
         ]);
     }
 
 
     /**
-     * @Route("/movies/new", name="app_movie_new")
+     * @Route("/movies/search", name="app_movie_search")
      */
-    public function new(EntityManagerInterface $entityManager)
+    public function search(Request $request, MovieRepository $repository)
     {
 
-        // $movie = new Movie();
-        // $movie->setTitle("Test Movie");
-        // $movie->setSlug("test-movie-" . rand(0, 1000));
-        // $movie->setReleaseYear(new DateTime("now"));
-        // $entityManager->persist($movie);
-        // $entityManager->flush();
-        // return new Response("movie added");
+        $movies = $repository->search(
+            $request->query->get('q')
+        );
+
+        return $this->render('movie/search.html.twig', [
+            "movies" => $movies,
+        ]);
     }
+
 
 
     /**
      * @Route("/movies/{slug}", name="app_movie_show")
      */
-    public function show(Movie $movie, MovieRepository $repository)
+    public function show(Movie $movie)
     {
 
         if (!$movie) {
@@ -73,13 +78,17 @@ class MovieController extends AbstractController
             $movieRating = 0;
         }
 
-
-
         return $this->render('movie/show.html.twig', [
             "movie" => $movie,
             "movieRating" => $movieRating,
         ]);
     }
+
+
+
+
+
+
 
     /**
      * @Route("/movies/{slug}/{rating<1|2|3|4|5>}", name="app_movie_rate", methods="POST")

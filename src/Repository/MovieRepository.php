@@ -24,7 +24,7 @@ class MovieRepository extends ServiceEntityRepository
     //  * @return Movie[] Returns an array of Movie objects
     //  */
 
-    public function findAllReleasedMoviesDESC($numberOfresults)
+    public function findAllReleasedMoviesDESC($numberOfresults): ?array
     {
         $qb = $this->createQueryBuilder('m');
 
@@ -51,16 +51,12 @@ class MovieRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-
-    /*
-    public function findOneBySomeField($value): ?Movie
+    public function search($q): ?array
     {
         return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('m.title LIKE :searchTerm')
+            ->setParameter('searchTerm', '%' . $q . '%')
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
     }
-    */
 }

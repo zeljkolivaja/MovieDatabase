@@ -1,12 +1,12 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Popular Movies
+{% block title %}Search results
 {% endblock %}
 
 {% block body %}
 
 	<h3>
-		Most Voted Movies
+		Search results
 	</h3>
 
 	<table class="table">
@@ -50,9 +50,4 @@
 			</tr>
 		</tbody>
 	{% endfor %}
-</table>
-
-{% for video in trailers %}
-	{{ video.movie.title }}
-	{{ video.fileName }}
-{% endfor %}{% endblock %}
+</table>{% endblock %}

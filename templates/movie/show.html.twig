@@ -1,23 +1,19 @@
-{% extends "base.html.twig" %}
+{% extends 'base.html.twig' %}
 
 {% block title %}
-	{{movie.title}}
+	{{ movie.title }}
 {% endblock %}
 
 {% block body %}
+	{% include 'movie/includes/rating.html.twig' %}
 
-	{% include ('movie/includes/rating.html.twig') %}
-
-
-    {# TO DO - make image and movie gallery
-	{% for image in movie.images %}
-	{{image.fileName}}
-	{% endfor %}
-
-
-	{% for video in movie.videos %}
-	{{video.fileName}}
-	{% endfor %} #}
-
-
+	{# TO DO - make image and movie gallery
+			{% for image in movie.images %}
+			{{image.fileName}}
+			{% endfor %}
+		
+		
+			{% for video in movie.videos %}
+			{{video.fileName}}
+			{% endfor %} #}
 {% endblock %}
