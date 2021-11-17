@@ -7,13 +7,29 @@
 {% block body %}
 	{% include 'movie/includes/rating.html.twig' %}
 
-	{# TO DO - make image and movie gallery
-			{% for image in movie.images %}
-			{{image.fileName}}
-			{% endfor %}
-		
-		
-			{% for video in movie.videos %}
-			{{video.fileName}}
-			{% endfor %} #}
+	{% if movie.images %}
+
+		<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-inner ">
+				{% for image in movie.images %}
+					<div class="carousel-item {% if loop.first %} active{% endif %}">
+						<img src="{{asset('images/'~ image.fileName ~'')}}" class="d-block w-100" alt="...">
+					</div>
+				{% endfor %}
+
+			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+
+
+	{% endif %}
+
+
 {% endblock %}

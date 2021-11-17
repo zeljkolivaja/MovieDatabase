@@ -78,6 +78,7 @@ class MovieController extends AbstractController
             $movieRating = 0;
         }
 
+
         return $this->render('movie/show.html.twig', [
             "movie" => $movie,
             "movieRating" => $movieRating,

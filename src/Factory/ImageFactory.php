@@ -37,9 +37,11 @@ final class ImageFactory extends ModelFactory
 
     protected function getDefaults(): array
     {
+        $exampleImg = ['img1.jpg', 'img2.jpg', 'img3.jpg', 'img4.jpg', 'img5.jpg'];
+
         return [
             // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
-            'fileName' => 'img1.jpg',
+            'fileName' => $exampleImg[array_rand($exampleImg, 1)],
             'movie' => MovieFactory::random(),
         ];
     }

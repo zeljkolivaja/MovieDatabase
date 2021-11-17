@@ -52,7 +52,7 @@ final class MovieFactory extends ModelFactory
             'releaseYear' => self::faker()->dateTimeBetween('-100 years', '-1 minute'),
             'storyLine' => self::faker()->paragraphs('1', true),
             'runtime' => rand(1, 240),
-            'PG' => array_rand($PG, 1),
+            'PG' => $PG[array_rand($PG, 1)],
             'rating' => rand(70, 100),
             'totalVotes' => rand(20, 100)
         ];

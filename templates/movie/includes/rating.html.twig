@@ -1,4 +1,4 @@
-<div class="card mb-3" style="max-width: 80%;">
+<div class="card mb-3" style="max-width: 100%;">
 	<div class="row no-gutters">
 		<div class="col-md-4">
 			<a href="{{path('app_movie_show',{slug: movie.slug} )}}"><img src="{{asset('images/img1.jpg')}}" class="card-img" alt="..."></a>
@@ -9,12 +9,14 @@
 				<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
 				<p class="card-text">
 					{% if movie.releaseYear %}
-						<small class="text-muted">Release year : {{movie.releaseYear|date('Y')}}</small>
-						{% else %}
-							<small class="text-muted">Release year : To be announced </small>
+						<small class="text-muted">Release year :
+							{{movie.releaseYear|date('Y')}}</small>
+					{% else %}
+						<small class="text-muted">Release year : To be announced
+						</small>
 					{% endif %}
-					
-					
+
+
 				</p>
 				<div class="flex-fill js-votes" style="min-width: 90px;">
 					Rate Movie:
@@ -39,16 +41,15 @@
 						<span>
 							User Score:
 							<span class="js-user-rating">
-							 {{movieRating}}
-						</span>
+								{{movieRating}}
+							</span>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<script>
-var slug = '{{ movie.slug }}';
-</script>
-
+	<script>
+		var slug = '{{ movie.slug }}';
+	</script>
