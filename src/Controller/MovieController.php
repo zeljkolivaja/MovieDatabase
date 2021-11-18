@@ -14,14 +14,18 @@ use Symfony\Component\HttpFoundation\Request;
 class MovieController extends AbstractController
 {
 
+    public function __construct(private MovieRepository $movieRepository)
+    {
+    }
+
     /**
      * @Route("/", name="app_homepage")
      */
-    public function homepage(MovieRepository $repository)
+    public function homepage()
     {
 
         //find all released  movies, limit by 3,  sort by release date descending 
-        $movies = $repository->findAllReleasedMoviesDESC(3);
+        $movies = $this->movieRepository->findAllReleasedMoviesDESC(3);
 
         return $this->render('movie/homepage.html.twig', [
             "movies" => $movies
@@ -31,10 +35,10 @@ class MovieController extends AbstractController
     /**
      * @Route("/movies/explore", name="app_movie_explore")
      */
-    public function exploreMovies(MovieRepository $repository, VideoRepository $videos)
+    public function exploreMovies(VideoRepository $videos)
     {
         //TODO most voted movies/ best rated movies, best rated movies by genre, newest movies
-        $movies = $repository->findMostVotedMovies(10);
+        $movies = $this->movieRepository->findMostVotedMovies(10);
         $trailers =  $videos->findLatestVideos(4);
 
         return $this->render('movie/explore.html.twig', [
@@ -47,10 +51,10 @@ class MovieController extends AbstractController
     /**
      * @Route("/movies/search", name="app_movie_search")
      */
-    public function search(Request $request, MovieRepository $repository)
+    public function search(Request $request)
     {
 
-        $movies = $repository->search(
+        $movies = $this->movieRepository->search(
             $request->query->get('q')
         );
 
@@ -94,13 +98,13 @@ class MovieController extends AbstractController
     /**
      * @Route("/movies/{slug}/{rating<1|2|3|4|5>}", name="app_movie_rate", methods="POST")
      */
-    public function rateMovie($slug, int $rating, EntityManagerInterface $entityManager, MovieRepository $repository)
+    public function rateMovie($slug, int $rating, EntityManagerInterface $entityManager)
     {
 
         //in the future prevent the single user from voting the same movie multiple times
 
         //find movie with slug
-        $movie = $repository->findOneBy(['slug' => $slug]);
+        $movie = $this->movieRepository->findOneBy(['slug' => $slug]);
 
 
         //calculate new rating
