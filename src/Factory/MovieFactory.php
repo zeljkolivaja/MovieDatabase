@@ -54,7 +54,7 @@ final class MovieFactory extends ModelFactory
             'runtime' => rand(1, 240),
             'PG' => $PG[array_rand($PG, 1)],
             'rating' => rand(70, 100),
-            'totalVotes' => rand(20, 100)
+            'totalVotes' => rand(20, 100),
         ];
     }
 

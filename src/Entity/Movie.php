@@ -193,8 +193,6 @@ class Movie
     }
 
 
-
-
     /**
      * @return Collection|Video[]
      */
