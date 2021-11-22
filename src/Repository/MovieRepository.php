@@ -30,6 +30,8 @@ class MovieRepository extends ServiceEntityRepository
 
         return $this->isReleased($qb)
             ->orderBy('m.releaseYear', 'DESC')
+            ->leftJoin('m.categories', 'category')
+            ->addSelect('category')
             ->setMaxResults($numberOfresults)
             ->getQuery()
             ->getResult();
@@ -37,7 +39,7 @@ class MovieRepository extends ServiceEntityRepository
 
     private function isReleased(QueryBuilder $qb): QueryBuilder
     {
-        return $qb->andWhere('m.releaseYear IS NOT NULL');
+        return $qb->andWhere("m.releaseYear <> ''");
     }
 
     public function findMostVotedMovies($numberOfresults)
