@@ -6,7 +6,6 @@ use App\Entity\Movie;
 use App\Repository\MovieRepository;
 use App\Repository\VideoRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,9 +21,9 @@ class MovieController extends AbstractController
     }
 
     /**
-     * @Route("/", name="app_homepage")
+     * @Route("/{page<\d+>}", name="app_homepage")
      */
-    public function homepage(Request $request)
+    public function homepage(int $page = 1)
     {
 
         //find all released  movies, limit by 3,  sort by release date descending 
@@ -35,7 +34,7 @@ class MovieController extends AbstractController
         );
 
         $pagerfanta->setMaxPerPage(3);
-        $pagerfanta->setCurrentPage($request->query->get('page', 1));
+        $pagerfanta->setCurrentPage($page);
 
         return $this->render('movie/homepage.html.twig', [
             "pagination" => $pagerfanta
