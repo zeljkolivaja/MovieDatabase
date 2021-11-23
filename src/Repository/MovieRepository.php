@@ -24,17 +24,14 @@ class MovieRepository extends ServiceEntityRepository
     //  * @return Movie[] Returns an array of Movie objects
     //  */
 
-    public function findAllReleasedMoviesDESC($numberOfresults): ?array
+    public function createAllReleasedQB(): QueryBuilder
     {
         $qb = $this->createQueryBuilder('m');
 
         return $this->isReleased($qb)
             ->orderBy('m.releaseYear', 'DESC')
             ->leftJoin('m.categories', 'category')
-            ->addSelect('category')
-            ->setMaxResults($numberOfresults)
-            ->getQuery()
-            ->getResult();
+            ->addSelect('category');
     }
 
     private function isReleased(QueryBuilder $qb): QueryBuilder

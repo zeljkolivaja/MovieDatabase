@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
+
 
 class MovieController extends AbstractController
 {
@@ -21,14 +24,21 @@ class MovieController extends AbstractController
     /**
      * @Route("/", name="app_homepage")
      */
-    public function homepage()
+    public function homepage(Request $request)
     {
 
         //find all released  movies, limit by 3,  sort by release date descending 
-        $movies = $this->movieRepository->findAllReleasedMoviesDESC(3);
+        $movieQueryBuilder = $this->movieRepository->createAllReleasedQB();
+
+        $pagerfanta = new Pagerfanta(
+            new QueryAdapter($movieQueryBuilder)
+        );
+
+        $pagerfanta->setMaxPerPage(3);
+        $pagerfanta->setCurrentPage($request->query->get('page', 1));
 
         return $this->render('movie/homepage.html.twig', [
-            "movies" => $movies
+            "pagination" => $pagerfanta
         ]);
     }
 
