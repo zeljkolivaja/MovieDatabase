@@ -2,10 +2,11 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Category;
+use App\Entity\User;
 use App\Factory\CategoryFactory;
 use App\Factory\ImageFactory;
 use App\Factory\MovieFactory;
+use App\Factory\UserFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Factory\VideoFactory;
@@ -27,7 +28,6 @@ class AppFixtures extends Fixture
             ];
         });
 
-
         //create 20 movies that are not released (releaseDate set to null for now,
         //TODO maybe add new field "released" with boolean, since maybe we will allow movies to have release date in the future)
         //assign them to random category and create two images for each
@@ -43,7 +43,8 @@ class AppFixtures extends Fixture
 
         //create 20 videos(just random strings for now), assign them to random movies
         VideoFactory::createMany(20);
-
+        UserFactory::createOne(['email' => 'test@test.com']);
+        UserFactory::createMany(10);
 
         $manager->flush();
     }

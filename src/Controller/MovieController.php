@@ -99,11 +99,6 @@ class MovieController extends AbstractController
     }
 
 
-
-
-
-
-
     /**
      * @Route("/movies/{slug}/{rating<1|2|3|4|5>}", name="app_movie_rate", methods="POST")
      */
