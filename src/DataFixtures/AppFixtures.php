@@ -43,6 +43,8 @@ class AppFixtures extends Fixture
 
         //create 20 videos(just random strings for now), assign them to random movies
         VideoFactory::createMany(20);
+
+
         UserFactory::createOne(['email' => 'test@test.com']);
         UserFactory::createMany(10);
 
