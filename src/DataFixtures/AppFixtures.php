@@ -45,7 +45,17 @@ class AppFixtures extends Fixture
         VideoFactory::createMany(20);
 
 
-        UserFactory::createOne(['email' => 'test@test.com']);
+        //admin user
+        UserFactory::createOne([
+            'email' => 'admin@test.com',
+            'roles' => ['ROLE_ADMIN'],
+        ]);
+
+        //regular user
+        UserFactory::createOne([
+            'email' => 'user@test.com',
+        ]);
+
         UserFactory::createMany(10);
 
         $manager->flush();

@@ -5,29 +5,27 @@ namespace App\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CustomCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
-use App\Entity\User;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class LoginFormAuthenticator extends AbstractAuthenticator
+class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
+
+    //used in onAuthenticationSuccess method to get the url path (if we are not logged in and we try to visit forbidden page)
+    use TargetPathTrait;
+
     public function __construct(private UserRepository $userRepository, private RouterInterface $router)
     {
-    }
-    public function supports(Request $request): ?bool
-    {
-        //this method intercept every request, if true it triggers authenticate method
-        return $request->getPathInfo() === '/login' && $request->isMethod('POST');
     }
 
     public function authenticate(Request $request): PassportInterface
@@ -47,34 +45,36 @@ class LoginFormAuthenticator extends AbstractAuthenticator
                 }
                 return $user;
             }),
-            new PasswordCredentials($password)
+            //compares user submited password to hashed one stored in DB
+            new PasswordCredentials($password),
+            [
+                //badge that validates submited csrf token coming from login form
+                new CsrfTokenBadge(
+                    'authenticate',
+                    $request->request->get('_csrf_token')
+                ),
+                new RememberMeBadge(),
+            ]
         );
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+
+        //if anon user tries to go somewhere forbiden he will be redirected to login page, but if he then logs in and is authorized to visit
+        //that page we redirect him there using this if statement (initial url he tried to visit is stored in the session, we check is it set and then redirect him)
+        if ($target = $this->getTargetPath($request->getSession(), $firewallName)) {
+            return new RedirectResponse($target);
+        }
+
         return new RedirectResponse(
             $this->router->generate('app_homepage')
         );
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+
+    protected function getLoginUrl(Request $request): string
     {
-        $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
-
-        return new RedirectResponse(
-            $this->router->generate('app_login')
-        );
+        return   $this->router->generate('app_login');
     }
-
-    //    public function start(Request $request, AuthenticationException $authException = null): Response
-    //    {
-    //        /*
-    //         * If you would like this class to control what happens when an anonymous user accesses a
-    //         * protected page (e.g. redirect to /login), uncomment this method and make this class
-    //         * implement Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface.
-    //         *
-    //         * For more details, see https://symfony.com/doc/current/security/experimental_authenticators.html#configuring-the-authentication-entry-point
-    //         */
-    //    }
 }

@@ -30,6 +30,11 @@
 								<li class="nav-item">
 									<a class="nav-link" href="{{ path('app_movie_explore') }}">Explore Movies</a>
 								</li>
+								{% if is_granted('ROLE_ADMIN') %}
+									<li class="nav-item">
+										<a class="nav-link" href="{{ path('app_movie_new') }}">Add Movie</a>
+									</li>
+								{% endif %}
 								<li class="nav-item dropdown">
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 										Dropdown
@@ -55,9 +60,15 @@
 								<input class="form-control me-2" type="search" placeholder="Search" name='q' aria-label="Search"/>
 								<button class="btn btn-outline-success" type="submit">Search</button>
 							</form>
-							<ul class="nav navbar-nav ml-auto">
-								<a class="nav-link text-black-50" href="{{ path('app_login') }}">Log In</a>
-								<a href="#" class="btn btn-dark">Register</a>
+							<ul
+								class="nav navbar-nav ml-auto">
+								<!-- if we are dealing with sensitive parts of the page, for example change password, use IS_AUTHENTICATED_FULLY -->
+								{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+									<a class="nav-link text-black-50" href="{{ path('app_logout') }}">Log out</a>
+								{% else %}
+									<a class="nav-link text-black-50" href="{{ path('app_login') }}">Log in</a>
+									<a href="#" class="btn btn-dark">Register</a>
+								{% endif %}
 							</ul>
 						</div>
 					</div>

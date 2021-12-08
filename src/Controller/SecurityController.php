@@ -18,6 +18,7 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', [
             //reading error from session, (set in LoginFOrmAuthenticator/onAuthenticationFailure method)
             'error' => $authenticationUtils->getLastAuthenticationError(),
+            'last_username' => $authenticationUtils->getLastUsername(),
         ]);
     }
 

@@ -11,6 +11,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 
 
 class MovieController extends AbstractController
@@ -71,6 +73,17 @@ class MovieController extends AbstractController
             "movies" => $movies,
         ]);
     }
+
+
+    /**
+     * @isGranted("ROLE_ADMIN")
+     * @Route("/movies/new", name="app_movie_new")
+     */
+    public function new()
+    {
+        dd("hello");
+    }
+
 
 
 
