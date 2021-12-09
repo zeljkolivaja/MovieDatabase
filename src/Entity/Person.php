@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PersonRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -51,6 +53,16 @@ class Person
      * @ORM\Column(type="string", length=10, nullable=true)
      */
     private $gender;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Personnel::class, mappedBy="person")
+     */
+    private $relatedMovies;
+
+    public function __construct()
+    {
+        $this->relatedMovies = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -137,6 +149,36 @@ class Person
     public function setGender(?string $gender): self
     {
         $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Personnel[]
+     */
+    public function getRelatedMovies(): Collection
+    {
+        return $this->relatedMovies;
+    }
+
+    public function addRelatedMovie(Personnel $relatedMovie): self
+    {
+        if (!$this->relatedMovies->contains($relatedMovie)) {
+            $this->relatedMovies[] = $relatedMovie;
+            $relatedMovie->setPerson($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRelatedMovie(Personnel $relatedMovie): self
+    {
+        if ($this->relatedMovies->removeElement($relatedMovie)) {
+            // set the owning side to null (unless already changed)
+            if ($relatedMovie->getPerson() === $this) {
+                $relatedMovie->setPerson(null);
+            }
+        }
 
         return $this;
     }

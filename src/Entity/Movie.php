@@ -83,11 +83,17 @@ class Movie
      */
     private $categories;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Personnel::class, mappedBy="movie")
+     */
+    private $personnels;
+
     public function __construct()
     {
         $this->videos = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->personnels = new ArrayCollection();
     }
 
 
@@ -273,6 +279,36 @@ class Movie
     public function removeCategory(Category $category): self
     {
         $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Personnel[]
+     */
+    public function getPersonnels(): Collection
+    {
+        return $this->personnels;
+    }
+
+    public function addPersonnel(Personnel $personnel): self
+    {
+        if (!$this->personnels->contains($personnel)) {
+            $this->personnels[] = $personnel;
+            $personnel->setMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removePersonnel(Personnel $personnel): self
+    {
+        if ($this->personnels->removeElement($personnel)) {
+            // set the owning side to null (unless already changed)
+            if ($personnel->getMovie() === $this) {
+                $personnel->setMovie(null);
+            }
+        }
 
         return $this;
     }

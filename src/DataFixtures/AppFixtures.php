@@ -2,11 +2,14 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Movie;
+use App\Entity\Person;
 use App\Entity\User;
 use App\Factory\CategoryFactory;
 use App\Factory\ImageFactory;
 use App\Factory\MovieFactory;
 use App\Factory\PersonFactory;
+use App\Factory\PersonnelFactory;
 use App\Factory\UserFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -25,9 +28,20 @@ class AppFixtures extends Fixture
         MovieFactory::createMany(100, function () {
             return [
                 'categories' => CategoryFactory::randomRange(1, 5),
-                'images' => ImageFactory::new()->many(2)
+                'images' => ImageFactory::new()->many(2),
             ];
         });
+
+        PersonFactory::createMany(100);
+
+        //create 200 manyToMany relations between movie and person, chose random movie and person objects from already created ones
+        PersonnelFactory::createMany(200, function () {
+            return [
+                "movie" => MovieFactory::random(),
+                "person" => PersonFactory::random(),
+            ];
+        });
+
 
         //create 20 movies that are not released (releaseDate set to null for now,
         //TODO maybe add new field "released" with boolean, since maybe we will allow movies to have release date in the future)
@@ -59,7 +73,6 @@ class AppFixtures extends Fixture
 
         UserFactory::createMany(10);
 
-        PersonFactory::createMany(100);
 
         $manager->flush();
     }
