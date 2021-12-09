@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Factory\CategoryFactory;
 use App\Factory\ImageFactory;
 use App\Factory\MovieFactory;
+use App\Factory\PersonFactory;
 use App\Factory\UserFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -57,6 +58,8 @@ class AppFixtures extends Fixture
         ]);
 
         UserFactory::createMany(10);
+
+        PersonFactory::createMany(100);
 
         $manager->flush();
     }
