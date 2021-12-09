@@ -90,8 +90,10 @@ class MovieController extends AbstractController
     /**
      * @Route("/movies/{slug}", name="app_movie_show")
      */
-    public function show(Movie $movie)
+    public function show($slug)
     {
+
+        $movie = $this->movieRepository->findOneJoinCategory($slug);
 
         if (!$movie) {
             throw $this->createNotFoundException("Movie not found");

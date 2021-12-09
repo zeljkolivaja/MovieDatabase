@@ -39,6 +39,18 @@ class MovieRepository extends ServiceEntityRepository
         return $qb->andWhere("m.releaseYear <> ''");
     }
 
+    public function findOneJoinCategory($slug)
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.slug = :val')
+            ->setParameter('val', $slug)
+            ->leftJoin('m.categories', 'category')
+            ->addSelect('category')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+
     public function findMostVotedMovies($numberOfresults)
     {
         $qb = $this->createQueryBuilder('m');
