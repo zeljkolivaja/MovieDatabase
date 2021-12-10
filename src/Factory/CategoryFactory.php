@@ -37,9 +37,10 @@ final class CategoryFactory extends ModelFactory
 
     protected function getDefaults(): array
     {
+        $categories = ['Action', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Mystery', 'Romance', 'Thriller', 'Western'];
+
         return [
-            // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
-            'name' => self::faker()->word(),
+            'name' => $categories[array_rand($categories, 1)],
             'createdAt' => self::faker()->dateTimeBetween('-1 year'),
         ];
     }

@@ -46,6 +46,8 @@ class MovieRepository extends ServiceEntityRepository
             ->setParameter('val', $slug)
             ->leftJoin('m.categories', 'category')
             ->addSelect('category')
+            ->leftJoin('m.personnels', 'personnel')
+            ->addSelect('personnel')
             ->getQuery()
             ->getOneOrNullResult();
     }

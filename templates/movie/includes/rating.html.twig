@@ -12,6 +12,18 @@
 						<span class="badge rounded-pill bg-light text-dark">{{category.name}}</span>
 					{% endfor %}
 				</small>
+				<br/>
+
+				<small class="text-muted">Movie Personnel :
+					{% for personnel in movie.personnels %}
+						<span class="badge rounded-pill bg-light text-dark">{{personnel.role}}
+							:
+							{{personnel.person.firstName}}
+						</span>
+					{% endfor %}
+
+				</small>
+
 				<p class="card-text">
 					{% if movie.releaseYear %}
 						<small class="text-muted">Release year :

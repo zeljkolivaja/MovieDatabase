@@ -47,7 +47,6 @@ final class MovieFactory extends ModelFactory
         $PG = ['G', 'PG', 'PG-13', 'R', 'NC-17'];
 
         return [
-            // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
             'title' => self::faker()->realText(50),
             'releaseYear' => self::faker()->dateTimeBetween('-100 years', '-1 minute'),
             'storyLine' => self::faker()->paragraphs('1', true),

@@ -40,7 +40,6 @@ final class PersonnelFactory extends ModelFactory
         $roles = ['Actor', 'Director', 'Producer', 'Executive Producer', 'Production Manager', 'Screenwriter'];
 
         return [
-            // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
             'movie' => MovieFactory::new(),
             'person' => PersonFactory::new(),
             'role' => $roles[array_rand($roles, 1)],

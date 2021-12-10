@@ -21,20 +21,20 @@ class AppFixtures extends Fixture
     {
 
         //create 10 categories(movie genres)
-        CategoryFactory::createMany(10);
+        CategoryFactory::createMany(9);
 
         //create 100 movies, connect each movie to random amount of categories(min 1 category , max 5)
         //create two images(just random strings for now) for each movie
         MovieFactory::createMany(100, function () {
             return [
-                'categories' => CategoryFactory::randomRange(1, 5),
+                'categories' => CategoryFactory::randomRange(1, 3),
                 'images' => ImageFactory::new()->many(2),
             ];
         });
 
         PersonFactory::createMany(100);
 
-        //create 200 manyToMany relations between movie and person, chose random movie and person objects from already created ones
+        //create 200 manyToMany relations between movies and persons, chose random movie and person objects from already created ones
         PersonnelFactory::createMany(200, function () {
             return [
                 "movie" => MovieFactory::random(),
