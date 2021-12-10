@@ -116,6 +116,7 @@ class MovieController extends AbstractController
 
     /**
      * @Route("/movies/{slug}/{rating<1|2|3|4|5>}", name="app_movie_rate", methods="POST")
+     * @isGranted("IS_AUTHENTICATED_REMEMBERED")
      */
     public function rateMovie($slug, int $rating, EntityManagerInterface $entityManager)
     {

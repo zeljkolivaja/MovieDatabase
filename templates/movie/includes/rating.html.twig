@@ -32,28 +32,29 @@
 						<small class="text-muted">Release year : To be announced
 						</small>
 					{% endif %}
-
-
 				</p>
+
 				<div class="flex-fill js-votes" style="min-width: 90px;">
-					Rate Movie:
-					<a class="vote" href="#" data-score="1">
-						<i class="fa-solid fa-1"></i>
-					</a>
-					<a class="vote" href="#" data-score="2">
-						<i class="fa-solid fa-2"></i>
-					</a>
+					{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+						Rate Movie:
+						<a class="vote" href="#" data-score="1">
+							<i class="fa-solid fa-1"></i>
+						</a>
+						<a class="vote" href="#" data-score="2">
+							<i class="fa-solid fa-2"></i>
+						</a>
 
-					<a class="vote" href="#" data-score="3">
-						<i class="fa-solid fa-3"></i>
-					</a>
+						<a class="vote" href="#" data-score="3">
+							<i class="fa-solid fa-3"></i>
+						</a>
 
-					<a class="vote" href="#" data-score="4">
-						<i class="fa-solid fa-4"></i>
-					</a>
-					<a class="vote" href="#" data-score="5">
-						<i class="fa-solid fa-5"></i>
-					</a>
+						<a class="vote" href="#" data-score="4">
+							<i class="fa-solid fa-4"></i>
+						</a>
+						<a class="vote" href="#" data-score="5">
+							<i class="fa-solid fa-5"></i>
+						</a>
+					{% endif %}
 					<div>
 						<span>
 							User Score:
@@ -62,6 +63,8 @@
 							</span>
 						</div>
 					</div>
+
+
 				</div>
 			</div>
 		</div>
