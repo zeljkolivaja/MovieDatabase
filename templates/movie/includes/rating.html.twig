@@ -36,24 +36,26 @@
 
 				<div class="flex-fill js-votes" style="min-width: 90px;">
 					{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-						Rate Movie:
-						<a class="vote" href="#" data-score="1">
-							<i class="fa-solid fa-1"></i>
-						</a>
-						<a class="vote" href="#" data-score="2">
-							<i class="fa-solid fa-2"></i>
-						</a>
+						<span class="vote-buttons">
+							Rate Movie:
+							<a class="vote" href="#" data-score="1">
+								<i class="fa-solid fa-1"></i>
+							</a>
+							<a class="vote" href="#" data-score="2">
+								<i class="fa-solid fa-2"></i>
+							</a>
 
-						<a class="vote" href="#" data-score="3">
-							<i class="fa-solid fa-3"></i>
-						</a>
+							<a class="vote" href="#" data-score="3">
+								<i class="fa-solid fa-3"></i>
+							</a>
 
-						<a class="vote" href="#" data-score="4">
-							<i class="fa-solid fa-4"></i>
-						</a>
-						<a class="vote" href="#" data-score="5">
-							<i class="fa-solid fa-5"></i>
-						</a>
+							<a class="vote" href="#" data-score="4">
+								<i class="fa-solid fa-4"></i>
+							</a>
+							<a class="vote" href="#" data-score="5">
+								<i class="fa-solid fa-5"></i>
+							</a>
+						</span>
 					{% endif %}
 					<div>
 						<span>

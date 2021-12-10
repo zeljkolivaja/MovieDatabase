@@ -88,6 +88,7 @@ class Movie
      */
     private $personnels;
 
+
     public function __construct()
     {
         $this->videos = new ArrayCollection();

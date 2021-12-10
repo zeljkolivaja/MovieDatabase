@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Movie;
+use App\Entity\User;
+use App\Entity\UserMovie;
 use App\Repository\MovieRepository;
 use App\Repository\VideoRepository;
+use App\Repository\UserMovieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,11 +17,10 @@ use Pagerfanta\Pagerfanta;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
-
 class MovieController extends AbstractController
 {
 
-    public function __construct(private MovieRepository $movieRepository)
+    public function __construct(private MovieRepository $movieRepository, private EntityManagerInterface $entityManager)
     {
     }
 
@@ -85,8 +87,6 @@ class MovieController extends AbstractController
     }
 
 
-
-
     /**
      * @Route("/movies/{slug}", name="app_movie_show")
      */
@@ -100,8 +100,7 @@ class MovieController extends AbstractController
         }
 
         if ($movie->getRating() != 0) {
-            $movieRating = $movie->getRating() / $movie->getTotalVotes();
-            $movieRating = number_format($movieRating, 2);
+            $movieRating = $this->calculateRating($movie->getRating(), $movie->getTotalVotes());
         } else {
             $movieRating = 0;
         }
@@ -118,33 +117,71 @@ class MovieController extends AbstractController
      * @Route("/movies/{slug}/{rating<1|2|3|4|5>}", name="app_movie_rate", methods="POST")
      * @isGranted("IS_AUTHENTICATED_REMEMBERED")
      */
-    public function rateMovie($slug, int $rating, EntityManagerInterface $entityManager)
+    public function rateMovie($slug, int $rating, UserMovieRepository $userMovieRepository)
     {
 
         //in the future prevent the single user from voting the same movie multiple times
 
-        //find movie with slug
+        $user = $this->getUser();
         $movie = $this->movieRepository->findOneBy(['slug' => $slug]);
+        $userMovie = $userMovieRepository->findOneBy(["user" => $user, "movie" => $movie]);
 
 
-        //calculate new rating
-        $newRating = $movie->getRating() + $rating;
+        if ($userMovie == null) {
 
-        //calculate new total votes
-        $newTotalVotes = $movie->getTotalVotes() + 1;
+            //find movie with slug
+            $movie = $this->movieRepository->findOneBy(['slug' => $slug]);
 
-        //calculate score to show the users
-        $newScore = $newRating / $newTotalVotes;
-        $movieRating = number_format($newScore, 2);
+            //calculate new rating
+            $newRating = $movie->getRating() + $rating;
 
-        //add new totalvotes and rating to DB
-        $movie->setTotalVotes($newTotalVotes);
-        $movie->setRating($newRating);
-        $entityManager->persist($movie);
-        $entityManager->flush();
+            //calculate new total votes
+            $newTotalVotes = $movie->getTotalVotes() + 1;
 
+            //calculate score to show the users
+            $movieRating = $this->calculateRating($newRating, $newTotalVotes);
+
+            //add movie and user to join table
+            $this->addUserMovie(user: $user, movie: $movie, rated: true);
+
+            //add new totalvotes and rating to DB
+            $movie->setTotalVotes($newTotalVotes);
+            $movie->setRating($newRating);
+            $this->entityManager->persist($movie);
+            $this->entityManager->flush();
+        }
+
+
+        if ($movie->getRating() != 0) {
+            $movieRating = $this->calculateRating($movie->getRating(), $movie->getTotalVotes());
+        } else {
+            $movieRating = 0;
+        }
 
         //return movie rating for ajax
         return $this->json(['movieRating' => $movieRating]);
+    }
+
+    private function calculateRating($totalVotes, $rating)
+    {
+        return number_format($totalVotes / $rating, 2);
+    }
+
+    private function addUserMovie(User $user, Movie $movie, $rated = null, $favorite = null)
+    {
+
+        $userMovie = new UserMovie;
+        $userMovie->setUser($user);
+        $userMovie->setMovie($movie);
+
+        if ($rated != null) {
+            $userMovie->setRated(true);
+        }
+
+        if ($favorite != null) {
+            $userMovie->setFavorite($favorite);
+        }
+
+        $this->entityManager->persist($userMovie);
     }
 }

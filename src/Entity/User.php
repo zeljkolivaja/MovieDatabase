@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
@@ -47,6 +49,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     private $plainPassword;
+
+    /**
+     * @ORM\OneToMany(targetEntity=UserMovie::class, mappedBy="user")
+     */
+    private $userMovies;
+
+    public function __construct()
+    {
+        $this->userMovies = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -170,5 +182,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
+    }
+
+    /**
+     * @return Collection|UserMovie[]
+     */
+    public function getUserMovies(): Collection
+    {
+        return $this->userMovies;
+    }
+
+    public function addUserMovie(UserMovie $userMovie): self
+    {
+        if (!$this->userMovies->contains($userMovie)) {
+            $this->userMovies[] = $userMovie;
+            $userMovie->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserMovie(UserMovie $userMovie): self
+    {
+        if ($this->userMovies->removeElement($userMovie)) {
+            // set the owning side to null (unless already changed)
+            if ($userMovie->getUser() === $this) {
+                $userMovie->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

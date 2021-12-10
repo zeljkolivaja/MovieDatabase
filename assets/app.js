@@ -26,5 +26,7 @@ $container.find('a').on('click', function(e) {
         method: 'POST'
     }).then(function(data) {
         $container.find('.js-user-rating').text(data.movieRating);
+        $container.find('.vote-buttons').remove();
+
     });
 });
