@@ -90,10 +90,13 @@ class MovieController extends AbstractController
     /**
      * @Route("/movies/{slug}", name="app_movie_show")
      */
-    public function show($slug)
+    public function show($slug, UserMovieRepository $userMovieRepository)
     {
 
+
         $movie = $this->movieRepository->findOneJoinCategory($slug);
+
+        $userMovie = $userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
 
         if (!$movie) {
             throw $this->createNotFoundException("Movie not found");
@@ -109,6 +112,7 @@ class MovieController extends AbstractController
         return $this->render('movie/show.html.twig', [
             "movie" => $movie,
             "movieRating" => $movieRating,
+            "userData" => $userMovie
         ]);
     }
 
@@ -120,47 +124,39 @@ class MovieController extends AbstractController
     public function rateMovie($slug, int $rating, UserMovieRepository $userMovieRepository)
     {
 
-        //in the future prevent the single user from voting the same movie multiple times
-
         $user = $this->getUser();
         $movie = $this->movieRepository->findOneBy(['slug' => $slug]);
+
+        //try to find the relation between user and movie
         $userMovie = $userMovieRepository->findOneBy(["user" => $user, "movie" => $movie]);
 
-
+        //if there is no join table between user and movie create one and set rated to true
         if ($userMovie == null) {
-
-            //find movie with slug
-            $movie = $this->movieRepository->findOneBy(['slug' => $slug]);
-
-            //calculate new rating
-            $newRating = $movie->getRating() + $rating;
-
-            //calculate new total votes
-            $newTotalVotes = $movie->getTotalVotes() + 1;
-
-            //calculate score to show the users
-            $movieRating = $this->calculateRating($newRating, $newTotalVotes);
-
-            //add movie and user to join table
-            $this->addUserMovie(user: $user, movie: $movie, rated: true);
-
-            //add new totalvotes and rating to DB
-            $movie->setTotalVotes($newTotalVotes);
-            $movie->setRating($newRating);
-            $this->entityManager->persist($movie);
-            $this->entityManager->flush();
+            $this->addUserMovie($user, $movie, true);
         }
 
+        //find the movie with the slug
+        $movie = $this->movieRepository->findOneBy(['slug' => $slug]);
 
-        if ($movie->getRating() != 0) {
-            $movieRating = $this->calculateRating($movie->getRating(), $movie->getTotalVotes());
-        } else {
-            $movieRating = 0;
-        }
+        //calculate new rating
+        $newRating = $movie->getRating() + $rating;
+
+        //calculate new total votes
+        $newTotalVotes = $movie->getTotalVotes() + 1;
+
+        //calculate score to show the users
+        $movieRating = $this->calculateRating($newRating, $newTotalVotes);
+
+        //add new totalvotes and rating to DB
+        $movie->setTotalVotes($newTotalVotes);
+        $movie->setRating($newRating);
+        $this->entityManager->persist($movie);
+        $this->entityManager->flush();
 
         //return movie rating for ajax
         return $this->json(['movieRating' => $movieRating]);
     }
+
 
     private function calculateRating($totalVotes, $rating)
     {
@@ -183,5 +179,6 @@ class MovieController extends AbstractController
         }
 
         $this->entityManager->persist($userMovie);
+        $this->entityManager->flush();
     }
 }

@@ -16,9 +16,10 @@
 
 				<small class="text-muted">Movie Personnel :
 					{% for personnel in movie.personnels %}
-						<span class="badge rounded-pill bg-light text-dark">{{personnel.role}}
-							:
+						<span class="badge rounded-pill bg-light text-dark">
+							{{personnel.role}}:
 							{{personnel.person.firstName}}
+							{{personnel.person.lastName}}
 						</span>
 					{% endfor %}
 
@@ -35,7 +36,7 @@
 				</p>
 
 				<div class="flex-fill js-votes" style="min-width: 90px;">
-					{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+					{% if is_granted('IS_AUTHENTICATED_REMEMBERED') and (userData is null or userData.rated == false) %}
 						<span class="vote-buttons">
 							Rate Movie:
 							<a class="vote" href="#" data-score="1">
@@ -61,7 +62,11 @@
 						<span>
 							User Score:
 							<span class="js-user-rating">
-								{{movieRating}}
+								{% if movieRating == 0 %}
+									Be the first to rate!!
+								{% else %}
+									{{movieRating}}
+								{% endif %}
 							</span>
 						</div>
 					</div>

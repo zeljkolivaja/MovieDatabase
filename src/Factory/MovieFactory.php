@@ -42,6 +42,11 @@ final class MovieFactory extends ModelFactory
         return $this->addState(['releaseYear' => null]);
     }
 
+    public function notRated(): self
+    {
+        return $this->addState(['rating' => null, 'totalVotes' => null]);
+    }
+
     protected function getDefaults(): array
     {
         $PG = ['G', 'PG', 'PG-13', 'R', 'NC-17'];

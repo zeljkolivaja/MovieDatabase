@@ -56,6 +56,18 @@ class AppFixtures extends Fixture
                 ];
             });
 
+
+        //create 40 movies that have no rating
+        MovieFactory::new()
+            ->notRated()
+            ->many(40)
+            ->create(function () {
+                return [
+                    'categories' => CategoryFactory::randomRange(1, 5),
+                    'images' => ImageFactory::new()->many(2)
+                ];
+            });
+
         //create 20 videos(just random strings for now), assign them to random movies
         VideoFactory::createMany(20);
 

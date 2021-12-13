@@ -127,7 +127,7 @@ class Movie
         return $this;
     }
 
-    public function getRating(): float
+    public function getRating(): ?float
     {
         return $this->rating;
     }
