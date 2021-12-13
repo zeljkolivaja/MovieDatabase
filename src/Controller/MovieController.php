@@ -67,6 +67,11 @@ class MovieController extends AbstractController
     public function search(Request $request)
     {
 
+        //if user entered nothing in search field prevent the search
+        if ($request->query->get('q') == "") {
+            return $this->redirect($request->headers->get('referer'));
+        }
+
         $movies = $this->movieRepository->search(
             $request->query->get('q')
         );
