@@ -44,15 +44,10 @@ class MovieRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('m')
             ->andWhere('m.slug = :val')
             ->setParameter('val', $slug)
-            //example of many to many join without extra data
             ->leftJoin('m.categories', 'category')
             ->addSelect('category')
-            //example of many to many join with additional data in join table, first we left join inner table (personnel)
-            //then we inner join that table with person table, then we pass both personnel and person to addSelect method
-            //this prevents additional queries
             ->leftJoin('m.personnels', 'personnel')
-            ->innerJoin('personnel.person', 'person')
-            ->addSelect(['personnel', 'person',])
+            ->addSelect('personnel')
             ->getQuery()
             ->getOneOrNullResult();
     }

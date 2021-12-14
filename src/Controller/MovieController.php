@@ -100,6 +100,7 @@ class MovieController extends AbstractController
 
 
         $movie = $this->movieRepository->findOneJoinCategory($slug);
+        $movie = $this->movieRepository->findOneBy(['slug' => $slug]);
 
         $userMovie = $userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
 
@@ -137,18 +138,14 @@ class MovieController extends AbstractController
 
         //if there is no join table between user and movie create one and set rated to true
         if ($userMovie == null) {
-            $this->addUserMovie($user, $movie, true);
+            $userMovieController = new UserMovieController($this->entityManager);
+            $userMovieController->addUserMovie($user, $movie, true);
         }
-
-        //find the movie with the slug
-        $movie = $this->movieRepository->findOneBy(['slug' => $slug]);
 
         //calculate new rating
         $newRating = $movie->getRating() + $rating;
-
         //calculate new total votes
         $newTotalVotes = $movie->getTotalVotes() + 1;
-
         //calculate score to show the users
         $movieRating = $this->calculateRating($newRating, $newTotalVotes);
 
@@ -166,24 +163,5 @@ class MovieController extends AbstractController
     private function calculateRating($totalVotes, $rating)
     {
         return number_format($totalVotes / $rating, 2);
-    }
-
-    private function addUserMovie(User $user, Movie $movie, $rated = null, $favorite = null)
-    {
-
-        $userMovie = new UserMovie;
-        $userMovie->setUser($user);
-        $userMovie->setMovie($movie);
-
-        if ($rated != null) {
-            $userMovie->setRated(true);
-        }
-
-        if ($favorite != null) {
-            $userMovie->setFavorite($favorite);
-        }
-
-        $this->entityManager->persist($userMovie);
-        $this->entityManager->flush();
     }
 }

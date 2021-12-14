@@ -24,7 +24,7 @@ class Personnel
     private $movie;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="relatedMovies")
+     * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="relatedMovies", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $person;

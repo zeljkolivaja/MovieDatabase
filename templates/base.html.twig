@@ -1,86 +1,103 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8"/>
-		<title>
-			{% block title %}
-				Welcome!
-			{% endblock %}
-		</title>
-		{% block stylesheets %}
-			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"/>
-			{{ encore_entry_link_tags('app') }}
+
+<head>
+	<meta charset="UTF-8" />
+	<title>
+		{% block title %}
+		Welcome to Movie Database0
 		{% endblock %}
-	</head>
+	</title>
+	{% block stylesheets %}
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" />
+	{{ encore_entry_link_tags('app') }}
+	{% endblock %}
+</head>
 
-	<body>
-		<div class="container">
-			{% block menu %}
-				<nav class="navbar navbar-expand-lg navbar-light bg-light">
-					<div class="container-fluid">
-						<a class="navbar-brand" href="{{ path('app_homepage') }}">MovieDB</a>
-						<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-							<span class="navbar-toggler-icon"></span>
+<body>
+	<div class="container">
+		{% block menu %}
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="{{ path('app_homepage') }}">MovieDB</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+					data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						<li class="nav-item">
+							<a class="nav-link active" aria-current="page" href="{{ path('app_homepage') }}">Home</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_movie_explore') }}">Explore Movies</a>
+						</li>
+						{% if is_granted('ROLE_ADMIN') %}
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_movie_new') }}">Add Movie</a>
+						</li>
+						{% endif %}
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false">
+								Dropdown
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<li>
+									<a class="dropdown-item" href="#">Action</a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="#">Another action</a>
+								</li>
+								<li>
+									<hr class="dropdown-divider" />
+								</li>
+								<li>
+									<a class="dropdown-item" href="#">Something else here</a>
+								</li>
+							</ul>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link disabled">Disabled</a>
+						</li>
+					</ul>
+					<form action="{{path('app_movie_search')}}" class="d-flex">
+						<input class="form-control me-2" type="search" placeholder="Search" name='q' aria-label="Search"
+							required />
+						<button class="btn btn-outline-success" type="submit">Search</button>
+					</form>
+
+					{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+					<div class="dropdown">
+						<button class="dropdown-toggle btn" type="button" id="user-dropdown" data-bs-toggle="dropdown"
+							aria-expanded="false">
+							<img src="{{ app.user.avatarUri }}" alt="{{ app.user.getDisplayName }} Avatar">
 						</button>
-						<div class="collapse navbar-collapse" id="navbarSupportedContent">
-							<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-								<li class="nav-item">
-									<a class="nav-link active" aria-current="page" href="{{ path('app_homepage') }}">Home</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="{{ path('app_movie_explore') }}">Explore Movies</a>
-								</li>
-								{% if is_granted('ROLE_ADMIN') %}
-									<li class="nav-item">
-										<a class="nav-link" href="{{ path('app_movie_new') }}">Add Movie</a>
-									</li>
-								{% endif %}
-								<li class="nav-item dropdown">
-									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-										Dropdown
-									</a>
-									<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-										<li>
-											<a class="dropdown-item" href="#">Action</a>
-										</li>
-										<li>
-											<a class="dropdown-item" href="#">Another action</a>
-										</li>
-										<li><hr class="dropdown-divider"/></li>
-										<li>
-											<a class="dropdown-item" href="#">Something else here</a>
-										</li>
-									</ul>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link disabled">Disabled</a>
-								</li>
-							</ul>
-							<form action="{{path('app_movie_search')}}" class="d-flex">
-								<input class="form-control me-2" type="search" placeholder="Search" name='q' aria-label="Search" required/>
-								<button class="btn btn-outline-success" type="submit">Search</button>
-							</form>
-							<ul
-								class="nav navbar-nav ml-auto">
-								<!-- if we are dealing with sensitive parts of the page, for example change password, use IS_AUTHENTICATED_FULLY -->
-								{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-									<a class="nav-link text-black-50" href="{{ path('app_logout') }}">Log out</a>
-								{% else %}
-									<a class="nav-link text-black-50" href="{{ path('app_login') }}">Log in</a>
-									<a href="#" class="btn btn-dark">Register</a>
-								{% endif %}
-							</ul>
-						</div>
+						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
+							<li>
+								<a class="dropdown-item" href="{{ path('app_logout') }}">Log Out</a>
+							</li>
+						</ul>
 					</div>
-				</nav>
-			{% endblock %}
+					{% else %}
+					<a class="nav-link text-black-50" href="{{ path('app_login') }}">Log In</a>
+					<a href="#" class="btn btn-dark">Register</a>
+					{% endif %}
+				</div>
+			</div>
+		</nav>
+		{% endblock %}
 
-			{% block body %}{% endblock %}
+		{% block body %}{% endblock %}
 
-			{% block javascripts %}
-				{{ encore_entry_script_tags('app') }}
-				<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-			{% endblock %}
-		</div>
-	</body>
+		{% block javascripts %}
+		{{ encore_entry_script_tags('app') }}
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+			integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+			crossorigin="anonymous"></script>
+		{% endblock %}
+	</div>
+</body>
+
 </html>
