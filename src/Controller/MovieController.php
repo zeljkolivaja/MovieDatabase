@@ -2,9 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Movie;
-use App\Entity\User;
-use App\Entity\UserMovie;
 use App\Repository\MovieRepository;
 use App\Repository\VideoRepository;
 use App\Repository\UserMovieRepository;
@@ -82,7 +79,6 @@ class MovieController extends AbstractController
     }
 
 
-
     /**
      * @Route("/movies/{slug}", name="app_movie_show")
      */
@@ -113,8 +109,6 @@ class MovieController extends AbstractController
         ]);
     }
 
-
-
     /**
      * @isGranted("ROLE_ADMIN")
      * @Route("/movies/new", name="app_movie_new")
@@ -123,8 +117,6 @@ class MovieController extends AbstractController
     {
         dd("hello");
     }
-
-
 
     private function calculateRating($totalVotes, $rating)
     {

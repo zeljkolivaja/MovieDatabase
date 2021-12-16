@@ -44,6 +44,11 @@ class UserMovie
      */
     private $rated = false;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $review;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +110,18 @@ class UserMovie
     public function setRated(?bool $rated): self
     {
         $this->rated = $rated;
+
+        return $this;
+    }
+
+    public function getReview(): ?string
+    {
+        return $this->review;
+    }
+
+    public function setReview(?string $review): self
+    {
+        $this->review = $review;
 
         return $this;
     }

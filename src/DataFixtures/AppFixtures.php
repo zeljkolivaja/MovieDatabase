@@ -11,6 +11,7 @@ use App\Factory\MovieFactory;
 use App\Factory\PersonFactory;
 use App\Factory\PersonnelFactory;
 use App\Factory\UserFactory;
+use App\Factory\UserMovieFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Factory\VideoFactory;
@@ -20,22 +21,48 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
 
+
+        //admin user
+        UserFactory::createOne([
+            'email' => 'admin@test.com',
+            'roles' => ['ROLE_ADMIN'],
+        ]);
+
+        //regular user
+        UserFactory::createOne([
+            'email' => 'user@test.com',
+        ]);
+
+
         //create 10 categories(movie genres)
         CategoryFactory::createMany(9);
 
         //create 100 movies, connect each movie to random amount of categories(min 1 category , max 5)
         //create two images(just random strings for now) for each movie
-        MovieFactory::createMany(100, function () {
+        MovieFactory::createMany(50, function () {
             return [
                 'categories' => CategoryFactory::randomRange(1, 3),
                 'images' => ImageFactory::new()->many(2),
             ];
         });
 
-        PersonFactory::createMany(100);
 
-        //create 200 manyToMany relations between movies and persons, chose random movie and person objects from already created ones
-        PersonnelFactory::createMany(200, function () {
+        //create 50 users
+        UserFactory::createMany(50);
+
+        //create 25 join tables between random users and movies
+        UserMovieFactory::createMany(25, function () {
+            return [
+                "user" => UserFactory::random(),
+                "movie" => MovieFactory::random(),
+            ];
+        });
+
+        //create 50 persons (movie personnel, actors, directors etc)
+        PersonFactory::createMany(50);
+
+        //create 100 manyToMany relations between movies and persons, chose random movie and person objects from already created ones
+        PersonnelFactory::createMany(100, function () {
             return [
                 "movie" => MovieFactory::random(),
                 "person" => PersonFactory::random(),
@@ -72,18 +99,7 @@ class AppFixtures extends Fixture
         VideoFactory::createMany(20);
 
 
-        //admin user
-        UserFactory::createOne([
-            'email' => 'admin@test.com',
-            'roles' => ['ROLE_ADMIN'],
-        ]);
 
-        //regular user
-        UserFactory::createOne([
-            'email' => 'user@test.com',
-        ]);
-
-        UserFactory::createMany(10);
 
 
         $manager->flush();

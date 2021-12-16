@@ -23,26 +23,6 @@ class UserMovieController extends AbstractController
     }
 
 
-    public function addUserMovie(User $user, Movie $movie, bool $rated = null, bool $favorite = null)
-    {
-
-        $userMovie = new UserMovie;
-        $userMovie->setUser($user);
-        $userMovie->setMovie($movie);
-
-        if ($rated != null) {
-            $userMovie->setRated($rated);
-        }
-
-        if ($favorite != null) {
-            $userMovie->setFavorite($favorite);
-        }
-
-        $this->entityManager->persist($userMovie);
-        $this->entityManager->flush();
-    }
-
-
     /**
      * @Route("/usermovies/{slug}/{rating<1|2|3|4|5>}", name="app_movie_rate", methods="POST")
      * @isGranted("IS_AUTHENTICATED_REMEMBERED")
@@ -76,6 +56,27 @@ class UserMovieController extends AbstractController
 
         //return movie rating for ajax
         return $this->json(['movieRating' => $movieRating]);
+    }
+
+
+
+    public function addUserMovie(User $user, Movie $movie, bool $rated = null, bool $favorite = null)
+    {
+
+        $userMovie = new UserMovie;
+        $userMovie->setUser($user);
+        $userMovie->setMovie($movie);
+
+        if ($rated != null) {
+            $userMovie->setRated($rated);
+        }
+
+        if ($favorite != null) {
+            $userMovie->setFavorite($favorite);
+        }
+
+        $this->entityManager->persist($userMovie);
+        $this->entityManager->flush();
     }
 
 
