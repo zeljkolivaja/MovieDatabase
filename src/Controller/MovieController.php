@@ -82,15 +82,6 @@ class MovieController extends AbstractController
     }
 
 
-    /**
-     * @isGranted("ROLE_ADMIN")
-     * @Route("/movies/new", name="app_movie_new")
-     */
-    public function new()
-    {
-        dd("hello");
-    }
-
 
     /**
      * @Route("/movies/{slug}", name="app_movie_show")
@@ -123,41 +114,16 @@ class MovieController extends AbstractController
     }
 
 
+
     /**
-     * @Route("/movies/{slug}/{rating<1|2|3|4|5>}", name="app_movie_rate", methods="POST")
-     * @isGranted("IS_AUTHENTICATED_REMEMBERED")
+     * @isGranted("ROLE_ADMIN")
+     * @Route("/movies/new", name="app_movie_new")
      */
-    public function rateMovie($slug, int $rating, UserMovieRepository $userMovieRepository)
+    public function new()
     {
-
-        $user = $this->getUser();
-        $movie = $this->movieRepository->findOneBy(['slug' => $slug]);
-
-        //try to find the relation between user and movie
-        $userMovie = $userMovieRepository->findOneBy(["user" => $user, "movie" => $movie]);
-
-        //if there is no join table between user and movie create one and set rated to true
-        if ($userMovie == null) {
-            $userMovieController = new UserMovieController($this->entityManager);
-            $userMovieController->addUserMovie($user, $movie, true);
-        }
-
-        //calculate new rating
-        $newRating = $movie->getRating() + $rating;
-        //calculate new total votes
-        $newTotalVotes = $movie->getTotalVotes() + 1;
-        //calculate score to show the users
-        $movieRating = $this->calculateRating($newRating, $newTotalVotes);
-
-        //add new totalvotes and rating to DB
-        $movie->setTotalVotes($newTotalVotes);
-        $movie->setRating($newRating);
-        $this->entityManager->persist($movie);
-        $this->entityManager->flush();
-
-        //return movie rating for ajax
-        return $this->json(['movieRating' => $movieRating]);
+        dd("hello");
     }
+
 
 
     private function calculateRating($totalVotes, $rating)
