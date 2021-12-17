@@ -22,19 +22,18 @@ class UserMovieRepository extends ServiceEntityRepository
     // /**
     //  * @return UserMovie[] Returns an array of UserMovie objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findByPublishedReviews($movie)
     {
         return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('u.movie = :val')
+            ->setParameter('val', $movie)
+            ->andWhere('u.review is NOT NULL')
             ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?UserMovie

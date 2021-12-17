@@ -46,7 +46,7 @@ class UserMovieController extends AbstractController
         //calculate new total votes
         $newTotalVotes = $movie->getTotalVotes() + 1;
         //calculate score to show the users
-        $movieRating = $this->calculateRating($newRating, $newTotalVotes);
+        $movieRating = self::calculateRating($newRating, $newTotalVotes);
 
         //add new totalvotes and rating to DB
         $movie->setTotalVotes($newTotalVotes);
@@ -80,7 +80,7 @@ class UserMovieController extends AbstractController
     }
 
 
-    private function calculateRating($totalVotes, $rating)
+    public static function calculateRating($totalVotes, $rating)
     {
         return number_format($totalVotes / $rating, 2);
     }

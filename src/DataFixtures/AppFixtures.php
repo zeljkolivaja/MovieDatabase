@@ -2,9 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Movie;
-use App\Entity\Person;
-use App\Entity\User;
 use App\Factory\CategoryFactory;
 use App\Factory\ImageFactory;
 use App\Factory\MovieFactory;
@@ -50,8 +47,8 @@ class AppFixtures extends Fixture
         //create 50 users
         UserFactory::createMany(50);
 
-        //create 25 join tables between random users and movies
-        UserMovieFactory::createMany(25, function () {
+        //create 250 join tables between random users and movies
+        UserMovieFactory::createMany(250, function () {
             return [
                 "user" => UserFactory::random(),
                 "movie" => MovieFactory::random(),
@@ -97,10 +94,6 @@ class AppFixtures extends Fixture
 
         //create 20 videos(just random strings for now), assign them to random movies
         VideoFactory::createMany(20);
-
-
-
-
 
         $manager->flush();
     }

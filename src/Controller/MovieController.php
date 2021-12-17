@@ -27,7 +27,7 @@ class MovieController extends AbstractController
     public function homepage(int $page = 1)
     {
 
-        //find all released  movies, limit by 3,  sort by release date descending 
+        //find all released  movies, limit by 3,  sort by release date descending
         $movieQueryBuilder = $this->movieRepository->createAllReleasedQB();
 
         $pagerfanta = new Pagerfanta(
@@ -86,17 +86,22 @@ class MovieController extends AbstractController
     {
 
 
-        $movie = $this->movieRepository->findOneJoinCategory($slug);
-        $movie = $this->movieRepository->findOneBy(['slug' => $slug]);
-
-        $userMovie = $userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
+        //find movie to display on show page, join with category and personnel
+        $movie = $this->movieRepository->findOneJoinCategoryPersonnel($slug);
 
         if (!$movie) {
             throw $this->createNotFoundException("Movie not found");
         }
 
+        //try to find relation between user and movie (to check did the user vote for movie, did he set movie to favorite, watch later etc)
+        $userMovie = $userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
+
+        //find all reviews for this movie from all users
+        $reviews = $userMovieRepository->findByPublishedReviews($movie);
+
+
         if ($movie->getRating() != 0) {
-            $movieRating = $this->calculateRating($movie->getRating(), $movie->getTotalVotes());
+            $movieRating = UserMovieController::calculateRating($movie->getRating(), $movie->getTotalVotes());
         } else {
             $movieRating = 0;
         }
@@ -105,7 +110,8 @@ class MovieController extends AbstractController
         return $this->render('movie/show.html.twig', [
             "movie" => $movie,
             "movieRating" => $movieRating,
-            "userData" => $userMovie
+            "userData" => $userMovie,
+            "reviews" => $reviews
         ]);
     }
 
@@ -116,10 +122,5 @@ class MovieController extends AbstractController
     public function new()
     {
         dd("hello");
-    }
-
-    private function calculateRating($totalVotes, $rating)
-    {
-        return number_format($totalVotes / $rating, 2);
     }
 }

@@ -39,7 +39,7 @@ class MovieRepository extends ServiceEntityRepository
         return $qb->andWhere("m.releaseYear <> ''");
     }
 
-    public function findOneJoinCategory($slug)
+    public function findOneJoinCategoryPersonnel($slug)
     {
         return $this->createQueryBuilder('m')
             ->andWhere('m.slug = :val')
