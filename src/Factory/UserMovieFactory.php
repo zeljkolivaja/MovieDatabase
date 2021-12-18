@@ -37,12 +37,14 @@ final class UserMovieFactory extends ModelFactory
 
     protected function getDefaults(): array
     {
-        return [
+        $rating = [1, 2, 3, 4, 5,];
 
+        return [
             'favorite' => $this->faker()->boolean(30),
             'watchLater' => $this->faker()->boolean(20),
             'review' =>  $this->faker()->paragraph(10),
             'rated' => $this->faker()->boolean(10),
+            'rating' => $rating[array_rand($rating, 1)]
         ];
     }
 

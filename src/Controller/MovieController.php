@@ -33,7 +33,6 @@ class MovieController extends AbstractController
         $pagerfanta = new Pagerfanta(
             new QueryAdapter($movieQueryBuilder)
         );
-
         $pagerfanta->setMaxPerPage(3);
         $pagerfanta->setCurrentPage($page);
 

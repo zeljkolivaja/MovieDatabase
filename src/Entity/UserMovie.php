@@ -47,7 +47,12 @@ class UserMovie
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $review;
+    private $review = null;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $rating;
 
     public function getId(): ?int
     {
@@ -122,6 +127,18 @@ class UserMovie
     public function setReview(?string $review): self
     {
         $this->review = $review;
+
+        return $this;
+    }
+
+    public function getRating(): ?int
+    {
+        return $this->rating;
+    }
+
+    public function setRating(?int $rating): self
+    {
+        $this->rating = $rating;
 
         return $this;
     }

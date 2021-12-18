@@ -32,27 +32,32 @@ class UserMovieController extends AbstractController
 
         $user = $this->getUser();
         $movie = $movieRepository->findOneBy(['slug' => $slug]);
-
         //try to find the relation between user and movie
         $userMovie = $userMovieRepository->findOneBy(["user" => $user, "movie" => $movie]);
-
-        //if there is no join table between user and movie create one and set rated to true
+        //if there is no relation between user and movie create one
         if ($userMovie == null) {
-            $this->addUserMovie($user, $movie, true);
+            $this->addUserMovie($user, $movie);
+            $userMovie = $userMovieRepository->findOneBy(["user" => $user, "movie" => $movie]);
         }
 
-        //calculate new rating
-        $newRating = $movie->getRating() + $rating;
-        //calculate new total votes
-        $newTotalVotes = $movie->getTotalVotes() + 1;
-        //calculate score to show the users
-        $movieRating = self::calculateRating($newRating, $newTotalVotes);
+        //check if the user already rated movie, if not proceed to rate the movie
+        //(because userMovie relation can also be created without rating, by adding the movie to favorites or watchLater list)
+        if (!$userMovie->getRated()) {
+            $newRating = $movie->getRating() + $rating;
+            $newTotalVotes = $movie->getTotalVotes() + 1;
 
-        //add new totalvotes and rating to DB
-        $movie->setTotalVotes($newTotalVotes);
-        $movie->setRating($newRating);
-        $this->entityManager->persist($movie);
-        $this->entityManager->flush();
+            //calculate score to show the users
+            $movieRating = self::calculateRating($newRating, $newTotalVotes);
+
+            //add rating to userMovie object, add new totalvotes and rating to DB
+            $this->userMovieRating($userMovie, $rating);
+            $movie->setTotalVotes($newTotalVotes);
+            $movie->setRating($newRating);
+            $this->entityManager->persist($movie);
+            $this->entityManager->flush();
+        } else {
+            $movieRating = $this->calculateRating($movie->getRating(), $movie->getTotalVotes());
+        }
 
         //return movie rating for ajax
         return $this->json(['movieRating' => $movieRating]);
@@ -60,24 +65,31 @@ class UserMovieController extends AbstractController
 
 
 
-    public function addUserMovie(User $user, Movie $movie, bool $rated = null, bool $favorite = null)
+    private function addUserMovie(User $user, Movie $movie)
     {
 
         $userMovie = new UserMovie;
         $userMovie->setUser($user);
         $userMovie->setMovie($movie);
 
-        if ($rated != null) {
-            $userMovie->setRated($rated);
-        }
+        $this->entityManager->persist($userMovie);
+        $this->entityManager->flush();
+    }
 
-        if ($favorite != null) {
-            $userMovie->setFavorite($favorite);
-        }
+    private function userMovieRating(UserMovie $userMovie, $rating)
+    {
+        $userMovie->setRating($rating);
+        $userMovie->setRated(true);
 
         $this->entityManager->persist($userMovie);
         $this->entityManager->flush();
     }
+
+    public function new()
+    {
+        # code...
+    }
+
 
 
     public static function calculateRating($totalVotes, $rating)
@@ -86,7 +98,7 @@ class UserMovieController extends AbstractController
     }
 
 
-    public function addReview()
+    public function review()
     {
         //try to find does the relation between the User and Movie already exist, if true set the $userMovie to that object
         //if there is no relation between user and move create new userMovie object
