@@ -84,7 +84,6 @@ class MovieController extends AbstractController
     public function show($slug, UserMovieRepository $userMovieRepository)
     {
 
-
         //find movie to display on show page, join with category and personnel
         $movie = $this->movieRepository->findOneJoinCategoryPersonnel($slug);
 
@@ -104,7 +103,6 @@ class MovieController extends AbstractController
         } else {
             $movieRating = 0;
         }
-
 
         return $this->render('movie/show.html.twig', [
             "movie" => $movie,

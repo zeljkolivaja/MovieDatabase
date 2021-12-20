@@ -22,7 +22,6 @@ class UserMovieController extends AbstractController
     {
     }
 
-
     /**
      * @Route("/usermovies/{slug}/{rating<1|2|3|4|5>}", name="app_movie_rate", methods="POST")
      * @isGranted("IS_AUTHENTICATED_REMEMBERED")
@@ -49,8 +48,10 @@ class UserMovieController extends AbstractController
             //calculate score to show the users
             $movieRating = self::calculateRating($newRating, $newTotalVotes);
 
-            //add rating to userMovie object, add new totalvotes and rating to DB
+            //add rating to userMovie object
             $this->userMovieRating($userMovie, $rating);
+
+            //add new TotalVotes and new Rating to movie entity
             $movie->setTotalVotes($newTotalVotes);
             $movie->setRating($newRating);
             $this->entityManager->persist($movie);
@@ -67,7 +68,6 @@ class UserMovieController extends AbstractController
 
     private function addUserMovie(User $user, Movie $movie)
     {
-
         $userMovie = new UserMovie;
         $userMovie->setUser($user);
         $userMovie->setMovie($movie);

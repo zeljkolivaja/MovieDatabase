@@ -9,12 +9,6 @@
 {% include 'movie/includes/rating.html.twig' %}
 
 
-{% if is_granted('IS_AUTHENTICATED_REMEMBERED') and (userData == NULL or userData.review == NULL) %}
-
-<a class="btn btn-dark" href="">Add Review</a>
-
-{% endif %}
-
 {% if movie.images %}
 
 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
@@ -39,11 +33,22 @@
 {% endif %}
 
 
+{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+
+{% if is_granted('REVIEW_PUBLISHED', userData) %}
+Your review
+{{userData.review}}
+{% else %}
+<a class="btn btn-dark" href="">Add Review</a>
+{% endif %}
+
+
+{% endif %}
+
 
 
 <h1>TODO display user Reviews</h1>
 {% if reviews is not null and reviews is defined %}
-
 {% for userReview in reviews %}
 <b>{{userReview.user.firstName}}</b>
 </br>

@@ -52,7 +52,7 @@ final class MovieFactory extends ModelFactory
         $PG = ['G', 'PG', 'PG-13', 'R', 'NC-17'];
 
         return [
-            'title' => self::faker()->realText(50),
+            'title' => self::faker()->realText(20),
             'releaseYear' => self::faker()->dateTimeBetween('-100 years', '-1 minute'),
             'storyLine' => self::faker()->paragraphs('1', true),
             'runtime' => rand(1, 240),
