@@ -42,6 +42,7 @@ final class UserMovieFactory extends ModelFactory
         return [
             'favorite' => $this->faker()->boolean(30),
             'watchLater' => $this->faker()->boolean(20),
+            'reviewTitle' => self::faker()->realText(20),
             'review' =>  $this->faker()->paragraph(10),
             'rated' => $this->faker()->boolean(10),
             'rating' => $rating[array_rand($rating, 1)]

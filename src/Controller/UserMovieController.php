@@ -5,22 +5,59 @@ namespace App\Controller;
 use App\Entity\Movie;
 use App\Entity\User;
 use App\Entity\UserMovie;
+use App\Form\ReviewFormType;
 use App\Repository\MovieRepository;
-use App\Repository\UserMovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-
+use Symfony\Component\HttpFoundation\Request;
 
 class UserMovieController extends AbstractController
 {
 
 
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager, private MovieRepository $movieRepository)
     {
     }
+
+
+    /**
+     * @isGranted("IS_AUTHENTICATED_REMEMBERED")
+     * @Route("/usermovies/review/{slug}", name="app_usermovies_review")
+     */
+    public function review($slug, Request $request)
+    {
+
+        $movie = $this->movieRepository->findOneBy(["slug" => $slug]);
+
+        $form = $this->createForm(ReviewFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $movie = $this->movieRepository->findOneBy(["slug" => $request->request->get('movie')]);
+            $data = $form->getData();
+
+            $userMovie = new UserMovie;
+            $userMovie->setMovie($movie);
+            $userMovie->setUser($this->getUser());
+            $userMovie->setReviewTitle($data['reviewTitle']);
+            $userMovie->setReview($data['review']);
+
+            $this->entityManager->persist($userMovie);
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
+        }
+
+        return $this->render('usermovies/review.html.twig', [
+            'reviewForm' => $form->createView(),
+            'movie' => $movie
+        ]);
+    }
+
 
     /**
      * @Route("/usermovies/{slug}/{rating<1|2|3|4|5>}", name="app_movie_rate", methods="POST")
@@ -65,7 +102,6 @@ class UserMovieController extends AbstractController
     }
 
 
-
     private function addUserMovie(User $user, Movie $movie)
     {
         $userMovie = new UserMovie;
@@ -85,11 +121,6 @@ class UserMovieController extends AbstractController
         $this->entityManager->flush();
     }
 
-    public function new()
-    {
-        # code...
-    }
-
 
 
     public static function calculateRating($totalVotes, $rating)
@@ -98,11 +129,6 @@ class UserMovieController extends AbstractController
     }
 
 
-    public function review()
-    {
-        //try to find does the relation between the User and Movie already exist, if true set the $userMovie to that object
-        //if there is no relation between user and move create new userMovie object
-    }
 
     public function editReview()
     {

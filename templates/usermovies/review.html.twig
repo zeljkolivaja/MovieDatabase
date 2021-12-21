@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Movie Review
+{% endblock %}
+
+{% block body %}
+
+<h1>Create new Review</h1>
+{{form_start(reviewForm)}}
+
+{{form_widget(reviewForm)}}
+<input type="hidden" name="movie" value="{{movie.slug}}">
+
+<button type="submit" class="btn btn-primary">Create</button>
+
+{{form_end(reviewForm)}}
+
+{% endblock %}

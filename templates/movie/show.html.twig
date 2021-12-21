@@ -39,9 +39,8 @@
 Your review
 {{userData.review}}
 {% else %}
-<a class="btn btn-dark" href="">Add Review</a>
+<a class="btn btn-dark" href="{{path('app_usermovies_review', {'slug': movie.slug})}}">Add Review</a>
 {% endif %}
-
 
 {% endif %}
 
@@ -51,6 +50,8 @@ Your review
 {% if reviews is not null and reviews is defined %}
 {% for userReview in reviews %}
 <b>{{userReview.user.firstName}}</b>
+</br>
+{{userReview.reviewTitle}}
 </br>
 {{userReview.review}}
 </br>
