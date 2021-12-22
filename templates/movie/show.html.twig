@@ -36,8 +36,15 @@
 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 
 {% if is_granted('REVIEW_PUBLISHED', userData) %}
-Your review
-{{userData.review}}
+My review
+</br>
+Rating: <b>{{userData.rating != null ? userData.rating : "not rated yet"}}</b>
+
+
+<br>
+Title : {{userData.reviewTitle}}
+<p>{{userData.review}}
+</p>
 {% else %}
 <a class="btn btn-dark" href="{{path('app_usermovies_review', {'slug': movie.slug})}}">Add Review</a>
 {% endif %}
@@ -45,16 +52,18 @@ Your review
 {% endif %}
 
 
-
-<h1>TODO display user Reviews</h1>
+<h2>User reviews</h2>
 {% if reviews is not null and reviews is defined %}
 {% for userReview in reviews %}
-<b>{{userReview.user.firstName}}</b>
+User: <b>{{userReview.user.firstName}}</b>
+</br>
+Rating: <b>{{userReview.rating != null ? userReview.rating : "not rated yet"}}</b>
+
 </br>
 {{userReview.reviewTitle}}
 </br>
-{{userReview.review}}
-</br>
+<p>{{userReview.review}}
+</p>
 {% endfor %}
 
 {% endif %}

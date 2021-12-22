@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\UserMovie;
 use App\Form\ReviewFormType;
 use App\Repository\MovieRepository;
+use App\Repository\UserMovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,7 @@ class UserMovieController extends AbstractController
 {
 
 
-    public function __construct(private EntityManagerInterface $entityManager, private MovieRepository $movieRepository)
+    public function __construct(private EntityManagerInterface $entityManager, private MovieRepository $movieRepository, private UserMovieRepository $userMovieRepository)
     {
     }
 
@@ -29,8 +30,15 @@ class UserMovieController extends AbstractController
      */
     public function review($slug, Request $request)
     {
-
         $movie = $this->movieRepository->findOneBy(["slug" => $slug]);
+
+        $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
+
+        //prevent user from submiting multiple reviews
+        if ($userMovie != null && $userMovie->getReview() != null) {
+            return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
+        }
+
 
         $form = $this->createForm(ReviewFormType::class);
         $form->handleRequest($request);
@@ -40,7 +48,11 @@ class UserMovieController extends AbstractController
             $movie = $this->movieRepository->findOneBy(["slug" => $request->request->get('movie')]);
             $data = $form->getData();
 
-            $userMovie = new UserMovie;
+            //if the userMovie entity is null, create new one, else update the one we already found
+            if ($userMovie == null) {
+                $userMovie = new UserMovie;
+            }
+
             $userMovie->setMovie($movie);
             $userMovie->setUser($this->getUser());
             $userMovie->setReviewTitle($data['reviewTitle']);
