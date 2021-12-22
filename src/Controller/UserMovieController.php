@@ -52,6 +52,7 @@ class UserMovieController extends AbstractController
             } else {
                 $this->addUserMovie($this->getUser(), $movie, $userMovie, $data);
             }
+            $this->addFlash('success', 'Your Review has been published');
             return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
         }
 

@@ -4,6 +4,8 @@ namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+
 
 class ReviewFormType extends AbstractType
 {
@@ -13,6 +15,6 @@ class ReviewFormType extends AbstractType
     {
         $builder
             ->add('reviewTitle')
-            ->add('review');
+            ->add('review', TextareaType::class);
     }
 }
