@@ -46,14 +46,14 @@ Title : {{userData.reviewTitle}}
 <p>{{userData.review}}
 </p>
 {% else %}
-<a class="btn btn-dark" href="{{path('app_usermovies_review', {'slug': movie.slug})}}">Add Review</a>
+<p><a class="btn btn-dark" href="{{path('app_usermovies_review', {'slug': movie.slug})}}">Add Review</a></p>
 {% endif %}
 
 {% endif %}
 
 
+{% if reviews %}
 <h2>User reviews</h2>
-{% if reviews is not null and reviews is defined %}
 {% for userReview in reviews %}
 User: <b>{{userReview.user.firstName}}</b>
 </br>
@@ -65,7 +65,8 @@ Rating: <b>{{userReview.rating != null ? userReview.rating : "not rated yet"}}</
 <p>{{userReview.review}}
 </p>
 {% endfor %}
-
+{% else %}
+<h2>No reviews yet, be the first one to review this Title!</h2>
 {% endif %}
 
 

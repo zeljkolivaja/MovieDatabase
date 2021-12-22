@@ -97,7 +97,6 @@ class MovieController extends AbstractController
         //find all reviews for this movie from all users
         $reviews = $userMovieRepository->findByPublishedReviews($movie);
 
-
         if ($movie->getRating() != 0) {
             $movieRating = UserMovieController::calculateRating($movie->getRating(), $movie->getTotalVotes());
         } else {

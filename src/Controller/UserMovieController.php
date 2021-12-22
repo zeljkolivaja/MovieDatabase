@@ -31,7 +31,6 @@ class UserMovieController extends AbstractController
     public function review($slug, Request $request)
     {
         $movie = $this->movieRepository->findOneBy(["slug" => $slug]);
-
         $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
 
         //prevent user from submiting multiple reviews
@@ -44,23 +43,15 @@ class UserMovieController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            //find the movie user wishes to review
             $movie = $this->movieRepository->findOneBy(["slug" => $request->request->get('movie')]);
             $data = $form->getData();
-
             //if the userMovie entity is null, create new one, else update the one we already found
             if ($userMovie == null) {
-                $userMovie = new UserMovie;
+                $this->addUserMovie($this->getUser(), $movie, null, $data);
+            } else {
+                $this->addUserMovie($this->getUser(), $movie, $userMovie, $data);
             }
-
-            $userMovie->setMovie($movie);
-            $userMovie->setUser($this->getUser());
-            $userMovie->setReviewTitle($data['reviewTitle']);
-            $userMovie->setReview($data['review']);
-
-            $this->entityManager->persist($userMovie);
-            $this->entityManager->flush();
-
             return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
         }
 
@@ -114,11 +105,18 @@ class UserMovieController extends AbstractController
     }
 
 
-    private function addUserMovie(User $user, Movie $movie)
+    private function addUserMovie(User $user, Movie $movie, UserMovie $userMovie = null, array $data = null)
     {
-        $userMovie = new UserMovie;
+        if ($userMovie == null) {
+            $userMovie = new UserMovie;
+        }
         $userMovie->setUser($user);
         $userMovie->setMovie($movie);
+
+        if ($data != null) {
+            $userMovie->setReviewTitle($data['reviewTitle']);
+            $userMovie->setReview($data['review']);
+        }
 
         $this->entityManager->persist($userMovie);
         $this->entityManager->flush();
