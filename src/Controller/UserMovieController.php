@@ -15,6 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @isGranted("IS_AUTHENTICATED_REMEMBERED")
+ */
 class UserMovieController extends AbstractController
 {
 
@@ -23,9 +26,7 @@ class UserMovieController extends AbstractController
     {
     }
 
-
     /**
-     * @isGranted("IS_AUTHENTICATED_REMEMBERED")
      * @Route("/usermovies/review/{slug}", name="app_usermovies_review")
      */
     public function review($slug, Request $request)
@@ -65,7 +66,6 @@ class UserMovieController extends AbstractController
 
     /**
      * @Route("/usermovies/{slug}/{rating<1|2|3|4|5>}", name="app_movie_rate", methods="POST")
-     * @isGranted("IS_AUTHENTICATED_REMEMBERED")
      */
     public function rateMovie($slug, int $rating, UserMovieRepository $userMovieRepository, MovieRepository $movieRepository)
     {
@@ -137,6 +137,21 @@ class UserMovieController extends AbstractController
     public static function calculateRating($totalVotes, $rating)
     {
         return number_format($totalVotes / $rating, 2);
+    }
+
+
+    /**
+     * @Route("/usermovies/delete/{slug}", name="app_usermovie_deleteReview")
+     */
+    public function deleteReview($slug)
+    {
+        $movie = $this->movieRepository->findOneBy(["slug" => $slug]);
+        $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
+
+        $userMovie->setReview(NULL);
+        $this->entityManager->persist($userMovie);
+        $this->entityManager->flush();
+        return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
     }
 
 

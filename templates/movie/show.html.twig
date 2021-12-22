@@ -45,6 +45,8 @@ Rating: <b>{{userData.rating != null ? userData.rating : "not rated yet"}}</b>
 Title : {{userData.reviewTitle}}
 <p>{{userData.review}}
 </p>
+<p><a class="btn btn-danger" href="{{path('app_usermovie_deleteReview', {'slug': movie.slug})}}">Delete Review</a></p>
+
 {% else %}
 <p><a class="btn btn-dark" href="{{path('app_usermovies_review', {'slug': movie.slug})}}">Add Review</a></p>
 {% endif %}
