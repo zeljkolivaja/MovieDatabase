@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\UserMovieRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=UserMovieRepository::class)
@@ -56,6 +58,7 @@ class UserMovie
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
+     * 
      */
     private $reviewTitle;
 
