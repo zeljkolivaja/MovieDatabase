@@ -4,12 +4,12 @@
 <div class="container">
     <div class="row">
         <div class="bg-light mt-4 p-4">
-            <h1>Review Movie</h1>
+            <h1>Edit Review</h1>
             {{ form_start(reviewForm) }}
-            {{ form_row(reviewForm.reviewTitle) }}
-            {{ form_row(reviewForm.review) }}
+            {{ form_row(reviewForm.reviewTitle, {label : "Edit review title"})}}
+            {{ form_row(reviewForm.review, {label : "Edit your review"}) }}
             {{ form_row(reviewForm.movie, {value : movie.slug}) }}
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="submit" class="btn btn-primary">Edit</button>
             {{ form_end(reviewForm) }}
         </div>
     </div>

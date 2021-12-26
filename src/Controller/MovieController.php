@@ -72,6 +72,7 @@ class MovieController extends AbstractController
             $request->query->get('q')
         );
 
+
         return $this->render('movie/search.html.twig', [
             "movies" => $movies,
         ]);

@@ -39,14 +39,15 @@ class UserMovieController extends AbstractController
             return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
         }
 
-
         $form = $this->createForm(ReviewFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //find the movie user wishes to review
-            $movie = $this->movieRepository->findOneBy(["slug" => $request->request->get('movie')]);
+
             $data = $form->getData();
+
+            //find the movie user wishes to review
+            $movie = $this->movieRepository->findOneBy(["slug" => $data['movie']]);
             //if the userMovie entity is null, create new one, else update the one we already found
             if ($userMovie == null) {
                 $this->addUserMovie($this->getUser(), $movie, null, $data);
@@ -58,6 +59,47 @@ class UserMovieController extends AbstractController
         }
 
         return $this->render('usermovies/review.html.twig', [
+            'reviewForm' => $form->createView(),
+            'movie' => $movie
+        ]);
+    }
+
+
+    /**
+     * @Route("/usermovies/editReview/{slug}", name="app_usermovies_editReview")
+     */
+    public function editReview($slug, Request $request)
+    {
+        $movie = $this->movieRepository->findOneBy(["slug" => $slug]);
+        $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
+
+        //prevent user from editing if he has no review already submitted
+        if ($userMovie == null or $userMovie->getReview() == null) {
+            return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
+        }
+
+        $editData = ["reviewTitle" => $userMovie->getReviewTitle(), "review" => $userMovie->getReview()];
+        $form = $this->createForm(ReviewFormType::class, $editData);
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $data = $form->getData();
+            //find the movie user wishes to review
+            $movie = $this->movieRepository->findOneBy(["slug" => $data['movie']]);
+
+            //if the userMovie entity is null, create new one, else update the one we already found
+            if ($userMovie == null) {
+                $this->addUserMovie($this->getUser(), $movie, null, $data);
+            } else {
+                $this->addUserMovie($this->getUser(), $movie, $userMovie, $data);
+            }
+            $this->addFlash('success', 'Your Review has been published');
+            return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
+        }
+
+        return $this->render('usermovies/edit_review.html.twig', [
             'reviewForm' => $form->createView(),
             'movie' => $movie
         ]);
@@ -152,13 +194,6 @@ class UserMovieController extends AbstractController
         $this->entityManager->persist($userMovie);
         $this->entityManager->flush();
         return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
-    }
-
-
-
-    public function editReview()
-    {
-        # code...
     }
 
     public function setFavorite()

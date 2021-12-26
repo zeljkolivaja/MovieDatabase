@@ -5,49 +5,53 @@
 
 {% block body %}
 
-	<h3>
-		Search results
-	</h3>
+<h3>
+	Search results
+</h3>
 
-	<table class="table">
-		<thead>
-			<tr>
-				<th scope="col">
-					#
-				</th>
-				<th scope="col">
-					Movie Name
-				</th>
-				<th scope="col">
-					Number of votes
-				</th>
-				<th scope="col">
-					User rating
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				{% set counter = 0 %}
-				{% for movie in movies %}
+<table class="table">
+	<thead>
+		<tr>
+			<th scope="col">
+				#
+			</th>
+			<th scope="col">
+				Movie Name
+			</th>
+			<th scope="col">
+				Number of votes
+			</th>
+			<th scope="col">
+				User rating
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			{% set counter = 0 %}
+			{% for movie in movies %}
 
-					{% set counter = counter + 1 %}
-					<th scope="row">
-						{{ counter }}
-					</th>
-					<td>
-						<a href="{{ path('app_movie_show',{slug: movie.slug} ) }}">
-							{{ movie.title }}
-						</a>
-					</td>
-					<td>
-						{{ movie.totalVotes }}
-					</td>
-					<td>
-						{{ (movie.rating / movie.totalVotes)| number_format(2) }}
-					</td>
-				</tr>
-			</tr>
-		</tbody>
+			{% set counter = counter + 1 %}
+			<th scope="row">
+				{{ counter }}
+			</th>
+			<td>
+				<a href="{{ path('app_movie_show',{slug: movie.slug} ) }}">
+					{{ movie.title }}
+				</a>
+			</td>
+			<td>
+				{{ movie.totalVotes }}
+			</td>
+			<td>
+				{% if movie.rating is not null %}
+				{{ (movie.rating / movie.totalVotes)| number_format(2) }}
+				{% else %}
+				No rating yet
+				{% endif %}
+			</td>
+		</tr>
+		</tr>
+	</tbody>
 	{% endfor %}
 </table>{% endblock %}
