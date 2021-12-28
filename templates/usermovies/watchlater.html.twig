@@ -15,7 +15,7 @@
 </h2>
 sorted by movie rating
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th scope="col">
@@ -30,14 +30,13 @@ sorted by movie rating
         </tr>
     </thead>
     <tbody>
+        {% set counter = 0 %}
+        {% for item in watchLaterList %}
+        {% set counter = counter + 1 %}
         <tr>
-            {% set counter = 0 %}
-            {% for item in watchLaterList %}
-
-            {% set counter = counter + 1 %}
-            <th scope="row">
+            <td>
                 {{ counter }}
-            </th>
+            </td>
             <td>
                 <a href="{{ path('app_movie_show',{slug: item.movie.slug} ) }}">
                     {{ item.movie.title }}
@@ -51,9 +50,8 @@ sorted by movie rating
                 {% endif %}
             </td>
         </tr>
-        </tr>
+        {% endfor %}
     </tbody>
-    {% endfor %}
 </table>
 {% else %}
 <p>

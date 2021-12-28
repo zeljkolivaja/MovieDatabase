@@ -160,15 +160,16 @@ class UserMovieController extends AbstractController
 
         if ($favorite === true) {
             $userMovie->setFavorite(true);
-        } else {
+        } elseif ($favorite === false) {
             $userMovie->setFavorite(false);
         }
 
         if ($watchLater === true) {
             $userMovie->setWatchLater(true);
-        } else {
+        } elseif ($watchLater === false) {
             $userMovie->setWatchLater(false);
         }
+
 
         if ($data != null) {
             $userMovie->setReviewTitle($data['reviewTitle']);
