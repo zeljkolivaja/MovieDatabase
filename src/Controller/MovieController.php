@@ -115,22 +115,11 @@ class MovieController extends AbstractController
             $movieRating = 0;
         }
 
-
-
         return $this->render('movie/show.html.twig', [
             "movie" => $movie,
             "movieRating" => $movieRating,
             "userData" => $userMovie,
             "pagination" => $pagerfanta
         ]);
-    }
-
-    /**
-     * @isGranted("ROLE_ADMIN")
-     * @Route("/movies/new", name="app_movie_new")
-     */
-    public function new()
-    {
-        dd("hello");
     }
 }

@@ -235,7 +235,7 @@ class UserMovieController extends AbstractController
 
 
     /**
-     * @Route("/usermovies/watchlater/{slug}", name="app_usermovie_watchlater")
+     * @Route("/usermovies/watchlater/{slug}", name="app_usermovie_setwatchlater")
      */
     public function setWatchLater($slug)
     {
@@ -254,5 +254,19 @@ class UserMovieController extends AbstractController
 
         $this->addFlash('success', 'Movie was added to your Watch List');
         return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
+    }
+
+
+    /**
+     * @Route("/usermovies/watchlater/", name="app_usermovie_watchlater")
+     */
+    public function watchLater()
+    {
+        $watchLaterList = $this->userMovieRepository->findBy(["user" => $this->getUser(), "watchLater" => true], ["rating" => 'DESC']);
+        // dd($watchLaterList);
+
+        return $this->render('/usermovies/watchlater.html.twig', [
+            'watchLaterList' => $watchLaterList
+        ]);
     }
 }

@@ -1,0 +1,54 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Watch Later List
+{% endblock %}
+
+{% block body %}
+
+<h2>
+    Your Watch Later List
+</h2>
+sorted by movie rating
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">
+                #
+            </th>
+            <th scope="col">
+                Movie Name
+            </th>
+            <th scope="col">
+                User rating
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% set counter = 0 %}
+            {% for item in watchLaterList %}
+
+            {% set counter = counter + 1 %}
+            <th scope="row">
+                {{ counter }}
+            </th>
+            <td>
+                <a href="{{ path('app_movie_show',{slug: item.movie.slug} ) }}">
+                    {{ item.movie.title }}
+                </a>
+            </td>
+            <td>
+                {% if item.movie.rating is not null %}
+                {{ (item.movie.rating / item.movie.totalVotes)| number_format(2) }}
+                {% else %}
+                No rating yet
+                {% endif %}
+            </td>
+        </tr>
+        </tr>
+    </tbody>
+    {% endfor %}
+</table>
+
+{% endblock %}

@@ -6,11 +6,55 @@
 
 {% block body %}
 
-{% include 'movie/includes/rating.html.twig' %}
+
+<div class="card mb-3" style="max-width: 100%;">
+	<div class="row no-gutters">
+		<div class="col-md-4">
+			<a href="{{path('app_movie_show',{slug: movie.slug} )}}"><img src="{{asset('images/img1.jpg')}}"
+					class="card-img" alt="..."></a>
+		</div>
+		<div class="col-md-8">
+			<div class="card-body">
+				<h5 class="card-title">{{movie.title}}</h5>
+				<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
+					content. This content is a little bit longer.</p>
+				<small class="text-muted">Categories :
+					{% for category in movie.categories %}
+					<span class="badge rounded-pill bg-light text-dark">{{category.name}}</span>
+					{% endfor %}
+				</small>
+				<br />
+
+				<small class="text-muted">Movie Personnel :
+					{% for personnel in movie.personnels %}
+					<span class="badge rounded-pill bg-light text-dark">
+						{{personnel.role}}:
+						{{personnel.person.firstName}}
+						{{personnel.person.lastName}}
+					</span>
+					{% endfor %}
+
+				</small>
+
+				<p class="card-text">
+					{% if movie.releaseYear %}
+					<small class="text-muted">Release year :
+						{{movie.releaseYear|date('Y')}}</small>
+					{% else %}
+					<small class="text-muted">Release year : To be announced
+					</small>
+					{% endif %}
+				</p>
+
+				{% include 'movie/includes/rating.html.twig' %}
+			</div>
+		</div>
+	</div>
+</div>
+
 
 
 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-
 {% if is_granted('FAVORITE_TRUE', userData) %}
 <p>
 	<a class="btn btn-danger" href="{{path('app_usermovie_favorite', {'slug': movie.slug})}}">Remove from favorites</a>
@@ -19,30 +63,24 @@
 <p><a class="btn btn-success" href="{{path('app_usermovie_favorite', {'slug': movie.slug})}}">Add to favorites</a>
 </p>
 {% endif %}
-
 {% endif %}
 
 
 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-
 {% if is_granted('WATCHLATER_TRUE', userData) %}
 <p>
-	<a class="btn btn-danger" href="{{path('app_usermovie_watchlater', {'slug': movie.slug})}}">Remove from
+	<a class="btn btn-danger" href="{{path('app_usermovie_setwatchlater', {'slug': movie.slug})}}">Remove from
 		Watch Later list</a>
 </p>
 {% else %}
-<p><a class="btn btn-success" href="{{path('app_usermovie_watchlater', {'slug': movie.slug})}}">Add to
+<p><a class="btn btn-success" href="{{path('app_usermovie_setwatchlater', {'slug': movie.slug})}}">Add to
 		Watch Later list</a>
 </p>
 {% endif %}
-
 {% endif %}
 
 
-
-
 {% if movie.images %}
-
 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
 	<div class="carousel-inner ">
 		{% for image in movie.images %}
@@ -61,17 +99,15 @@
 		<span class="visually-hidden">Next</span>
 	</button>
 </div>
-
 {% endif %}
 
 
-{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 
+{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 {% if is_granted('REVIEW_PUBLISHED', userData) %}
 My review
 </br>
 Rating: <b>{{userData.rating != null ? userData.rating : "not rated yet"}}</b>
-
 
 <br>
 Title : {{userData.reviewTitle}}
@@ -84,26 +120,21 @@ Title : {{userData.reviewTitle}}
 {% else %}
 <p><a class="btn btn-success" href="{{path('app_usermovies_review', {'slug': movie.slug})}}">Add Review</a></p>
 {% endif %}
-
 {% endif %}
 
 
 {% if pagination %}
 <h2>User reviews</h2>
-
 {% for userReview in pagination %}
-User: <b>{{userReview.user.getDisplayName}}</b>
-</br>
-Rating: <b>{{userReview.rating != null ? userReview.rating : "not rated yet"}}</b>
+User: <b>{{userReview.user.getDisplayName}}</b> <br />
+Rating: <b>{{userReview.rating != null ? userReview.rating : "not rated yet"}}</b></br>
 
-</br>
-{{userReview.reviewTitle}}
+<b>{{userReview.reviewTitle}}</b>
 </br>
 <p>{{userReview.review}}
 </p>
 {% endfor %}
 {{pagerfanta(pagination)}}
-
 {% else %}
 <h2>No reviews yet, be the first one to review this Title!</h2>
 {% endif %}

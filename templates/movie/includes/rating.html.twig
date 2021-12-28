@@ -1,85 +1,41 @@
-<div class="card mb-3" style="max-width: 100%;">
-	<div class="row no-gutters">
-		<div class="col-md-4">
-			<a href="{{path('app_movie_show',{slug: movie.slug} )}}"><img src="{{asset('images/img1.jpg')}}"
-					class="card-img" alt="..."></a>
-		</div>
-		<div class="col-md-8">
-			<div class="card-body">
-				<h5 class="card-title">{{movie.title}}</h5>
-				<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
-					content. This content is a little bit longer.</p>
-				<small class="text-muted">Categories :
-					{% for category in movie.categories %}
-					<span class="badge rounded-pill bg-light text-dark">{{category.name}}</span>
-					{% endfor %}
-				</small>
-				<br />
+<div class="flex-fill js-votes" style="min-width: 90px;">
+	{% if is_granted('IS_AUTHENTICATED_REMEMBERED') and (userData is null or userData.rated == false) %}
+	<span class="vote-buttons">
+		Rate Movie:
+		<a class="vote" href="#" data-score="1">
+			<i class="fa-solid fa-1"></i>
+		</a>
+		<a class="vote" href="#" data-score="2">
+			<i class="fa-solid fa-2"></i>
+		</a>
 
-				<small class="text-muted">Movie Personnel :
-					{% for personnel in movie.personnels %}
-					<span class="badge rounded-pill bg-light text-dark">
-						{{personnel.role}}:
-						{{personnel.person.firstName}}
-						{{personnel.person.lastName}}
-					</span>
-					{% endfor %}
+		<a class="vote" href="#" data-score="3">
+			<i class="fa-solid fa-3"></i>
+		</a>
 
-				</small>
-
-				<p class="card-text">
-					{% if movie.releaseYear %}
-					<small class="text-muted">Release year :
-						{{movie.releaseYear|date('Y')}}</small>
-					{% else %}
-					<small class="text-muted">Release year : To be announced
-					</small>
-					{% endif %}
-				</p>
-
-				<div class="flex-fill js-votes" style="min-width: 90px;">
-					{% if is_granted('IS_AUTHENTICATED_REMEMBERED') and (userData is null or userData.rated == false) %}
-					<span class="vote-buttons">
-						Rate Movie:
-						<a class="vote" href="#" data-score="1">
-							<i class="fa-solid fa-1"></i>
-						</a>
-						<a class="vote" href="#" data-score="2">
-							<i class="fa-solid fa-2"></i>
-						</a>
-
-						<a class="vote" href="#" data-score="3">
-							<i class="fa-solid fa-3"></i>
-						</a>
-
-						<a class="vote" href="#" data-score="4">
-							<i class="fa-solid fa-4"></i>
-						</a>
-						<a class="vote" href="#" data-score="5">
-							<i class="fa-solid fa-5"></i>
-						</a>
-					</span>
-					{% endif %}
-					<div>
-						<span>
-							User Score:
-							<span class="js-user-rating">
-								{% if movieRating == 0 and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-								Be the first to rate!!
-								{% elseif movieRating == 0 %}
-								No rating yet, register or log in and be the first to rate!
-								{% else %}
-								{{movieRating}}
-								{% endif %}
-							</span>
-					</div>
-				</div>
-
-
-			</div>
-		</div>
+		<a class="vote" href="#" data-score="4">
+			<i class="fa-solid fa-4"></i>
+		</a>
+		<a class="vote" href="#" data-score="5">
+			<i class="fa-solid fa-5"></i>
+		</a>
+	</span>
+	{% endif %}
+	<div>
+		<span>
+			User Score:
+			<span class="js-user-rating">
+				{% if movieRating == 0 and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+				Be the first to rate!!
+				{% elseif movieRating == 0 %}
+				No rating yet, register or log in and be the first to rate!
+				{% else %}
+				{{movieRating}}
+				{% endif %}
+			</span>
 	</div>
 </div>
+
 
 <script>
 	var slug = '{{ movie.slug }}';
