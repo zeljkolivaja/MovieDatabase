@@ -14,7 +14,7 @@ class UserMovieVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['REVIEW_PUBLISHED',])
+        return in_array($attribute, ['REVIEW_PUBLISHED', 'FAVORITE_TRUE', 'WATCHLATER_TRUE'])
             && $subject instanceof \App\Entity\UserMovie;
     }
 
@@ -35,6 +35,10 @@ class UserMovieVoter extends Voter
         switch ($attribute) {
             case 'REVIEW_PUBLISHED':
                 return ($subject != NULL && $subject->getReview());
+            case 'FAVORITE_TRUE';
+                return ($subject != NULL && $subject->getFavorite());
+            case 'WATCHLATER_TRUE';
+                return ($subject != NULL && $subject->getWatchLater());
         }
 
         return false;

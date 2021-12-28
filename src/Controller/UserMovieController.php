@@ -36,6 +36,7 @@ class UserMovieController extends AbstractController
 
         //prevent user from submiting multiple reviews
         if ($userMovie != null && $userMovie->getReview() != null) {
+            $this->addFlash('success', 'You have already rated this Movie');
             return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
         }
 
@@ -50,9 +51,9 @@ class UserMovieController extends AbstractController
             $movie = $this->movieRepository->findOneBy(["slug" => $data['movie']]);
             //if the userMovie entity is null, create new one, else update the one we already found
             if ($userMovie == null) {
-                $this->addUserMovie($this->getUser(), $movie, null, $data);
+                $this->addUserMovie(user: $this->getUser(), movie: $movie, data: $data);
             } else {
-                $this->addUserMovie($this->getUser(), $movie, $userMovie, $data);
+                $this->addUserMovie(userMovie: $userMovie, data: $data);
             }
             $this->addFlash('success', 'Your Review has been published');
             return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
@@ -91,9 +92,9 @@ class UserMovieController extends AbstractController
 
             //if the userMovie entity is null, create new one, else update the one we already found
             if ($userMovie == null) {
-                $this->addUserMovie($this->getUser(), $movie, null, $data);
+                $this->addUserMovie(user: $this->getUser(), movie: $movie, data: $data);
             } else {
-                $this->addUserMovie($this->getUser(), $movie, $userMovie, $data);
+                $this->addUserMovie(userMovie: $userMovie, data: $data);
             }
             $this->addFlash('success', 'Your Review has been published');
             return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
@@ -148,13 +149,26 @@ class UserMovieController extends AbstractController
     }
 
 
-    private function addUserMovie(User $user, Movie $movie, UserMovie $userMovie = null, array $data = null)
+    private function addUserMovie(User $user = null, Movie $movie = null, UserMovie $userMovie = null, array $data = null, bool $favorite = null, bool $watchLater = null)
     {
-        if ($userMovie == null) {
+        if ($userMovie === null) {
             $userMovie = new UserMovie;
+            $userMovie->setUser($user);
+            $userMovie->setMovie($movie);
         }
-        $userMovie->setUser($user);
-        $userMovie->setMovie($movie);
+
+
+        if ($favorite === true) {
+            $userMovie->setFavorite(true);
+        } else {
+            $userMovie->setFavorite(false);
+        }
+
+        if ($watchLater === true) {
+            $userMovie->setWatchLater(true);
+        } else {
+            $userMovie->setWatchLater(false);
+        }
 
         if ($data != null) {
             $userMovie->setReviewTitle($data['reviewTitle']);
@@ -193,16 +207,52 @@ class UserMovieController extends AbstractController
         $userMovie->setReview(NULL);
         $this->entityManager->persist($userMovie);
         $this->entityManager->flush();
+        $this->addFlash('success', 'Your Review was deleted');
         return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
     }
 
-    public function setFavorite()
+    /**
+     * @Route("/usermovies/favorite/{slug}", name="app_usermovie_favorite")
+     */
+    public function setFavorite($slug)
     {
-        # code...
+        $movie = $this->movieRepository->findOneBy(["slug" => $slug]);
+        $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
+
+        if ($userMovie === null) {
+            $this->addUserMovie(user: $this->getUser(), movie: $movie, favorite: true);
+        } elseif ($userMovie->getFavorite() === false) {
+            $this->addUserMovie(userMovie: $userMovie, favorite: true);
+        } elseif ($userMovie->getFavorite() === true) {
+            $this->addUserMovie(userMovie: $userMovie, favorite: false);
+            $this->addFlash('success', 'Movie was removed from your Favorites');
+            return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
+        }
+
+        $this->addFlash('success', 'Movie was added to your Favorites');
+        return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
     }
 
-    public function setWatchLater()
+
+    /**
+     * @Route("/usermovies/watchlater/{slug}", name="app_usermovie_watchlater")
+     */
+    public function setWatchLater($slug)
     {
-        # code...
+        $movie = $this->movieRepository->findOneBy(["slug" => $slug]);
+        $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
+
+        if ($userMovie === null) {
+            $this->addUserMovie(user: $this->getUser(), movie: $movie, watchLater: true);
+        } elseif ($userMovie->getWatchLater() === false) {
+            $this->addUserMovie(userMovie: $userMovie, watchLater: true);
+        } elseif ($userMovie->getWatchLater() === true) {
+            $this->addUserMovie(userMovie: $userMovie, watchLater: false);
+            $this->addFlash('success', 'Movie was removed from your Watch List');
+            return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
+        }
+
+        $this->addFlash('success', 'Movie was added to your Watch List');
+        return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
     }
 }
