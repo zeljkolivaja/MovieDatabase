@@ -82,7 +82,7 @@ class MovieController extends AbstractController
     /**
      * @Route("/movies/{slug}", name="app_movie_show")
      */
-    public function show($slug, UserMovieRepository $userMovieRepository)
+    public function show($slug, Request $request, UserMovieRepository $userMovieRepository)
     {
 
         //find movie to display on show page, join with category and personnel
@@ -95,8 +95,19 @@ class MovieController extends AbstractController
         //try to find relation between user and movie (to check did the user vote for movie, did he set movie to favorite, watch later etc)
         $userMovie = $userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
 
-        //find all reviews for this movie from all users
-        $reviews = $userMovieRepository->findByPublishedReviews($movie);
+        //find all reviews for this movie from all users, and make pagination with pagerfanta
+        $reviewQueryBuilder = $userMovieRepository->createAllReviewsQB($movie);
+        $pagerfanta = new Pagerfanta(
+            new QueryAdapter($reviewQueryBuilder)
+        );
+        $pagerfanta->setMaxPerPage(3);
+        $pagerfanta->setCurrentPage($request->query->get("page", 1));
+
+        //if no reviews found set pagerfanta object to null
+        if ($pagerfanta->count() == null) {
+            $pagerfanta = null;
+        }
+
 
         if ($movie->getRating() != 0) {
             $movieRating = UserMovieController::calculateRating($movie->getRating(), $movie->getTotalVotes());
@@ -104,11 +115,13 @@ class MovieController extends AbstractController
             $movieRating = 0;
         }
 
+
+
         return $this->render('movie/show.html.twig', [
             "movie" => $movie,
             "movieRating" => $movieRating,
             "userData" => $userMovie,
-            "reviews" => $reviews
+            "pagination" => $pagerfanta
         ]);
     }
 

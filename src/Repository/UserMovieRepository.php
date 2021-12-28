@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\UserMovie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,31 +20,12 @@ class UserMovieRepository extends ServiceEntityRepository
         parent::__construct($registry, UserMovie::class);
     }
 
-    // /**
-    //  * @return UserMovie[] Returns an array of UserMovie objects
-    //  */
-
-    public function findByPublishedReviews($movie)
+    public function createAllReviewsQB($movie): QueryBuilder
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.movie = :val')
             ->setParameter('val', $movie)
             ->andWhere('u.review is NOT NULL')
-            ->orderBy('u.id', 'ASC')
-            ->getQuery()
-            ->getResult();
+            ->orderBy('u.id', 'ASC');
     }
-
-
-    /*
-    public function findOneBySomeField($value): ?UserMovie
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

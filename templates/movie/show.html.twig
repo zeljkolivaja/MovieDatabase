@@ -88,9 +88,10 @@ Title : {{userData.reviewTitle}}
 {% endif %}
 
 
-{% if reviews %}
+{% if pagination %}
 <h2>User reviews</h2>
-{% for userReview in reviews %}
+
+{% for userReview in pagination %}
 User: <b>{{userReview.user.getDisplayName}}</b>
 </br>
 Rating: <b>{{userReview.rating != null ? userReview.rating : "not rated yet"}}</b>
@@ -101,9 +102,13 @@ Rating: <b>{{userReview.rating != null ? userReview.rating : "not rated yet"}}</
 <p>{{userReview.review}}
 </p>
 {% endfor %}
+{{pagerfanta(pagination)}}
+
 {% else %}
 <h2>No reviews yet, be the first one to review this Title!</h2>
 {% endif %}
+
+
 
 
 

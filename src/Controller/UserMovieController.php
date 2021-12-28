@@ -151,12 +151,12 @@ class UserMovieController extends AbstractController
 
     private function addUserMovie(User $user = null, Movie $movie = null, UserMovie $userMovie = null, array $data = null, bool $favorite = null, bool $watchLater = null)
     {
+
         if ($userMovie === null) {
             $userMovie = new UserMovie;
             $userMovie->setUser($user);
             $userMovie->setMovie($movie);
         }
-
 
         if ($favorite === true) {
             $userMovie->setFavorite(true);
