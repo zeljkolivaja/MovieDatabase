@@ -1,19 +1,19 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Watch Later List
+{% block title %}Favorites
 {% endblock %}
 
 {% block body %}
 
 
-
-
-{% if watchLaterList is not empty %}
+{% if favoritesList is not empty %}
 
 <h2>
-    Your Watch Later List
+    Your Favorite Movies
 </h2>
 sorted by movie rating
+
+
 
 <table class="table">
     <thead>
@@ -32,7 +32,7 @@ sorted by movie rating
     <tbody>
         <tr>
             {% set counter = 0 %}
-            {% for item in watchLaterList %}
+            {% for item in favoritesList %}
 
             {% set counter = counter + 1 %}
             <th scope="row">
@@ -55,12 +55,13 @@ sorted by movie rating
     </tbody>
     {% endfor %}
 </table>
+
 {% else %}
 <p>
-<h3>You have no movies added to your watch later list, <a href="{{path('app_movie_explore')}}">check out</a> some of the
+<h3>You have no movies added to your favorites, <a href="{{path('app_movie_explore')}}">check out</a> some of the
     popular titles.</h3>
 </p>
-{% endif %}
 
+{% endif %}
 
 {% endblock %}

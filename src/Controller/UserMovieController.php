@@ -269,4 +269,16 @@ class UserMovieController extends AbstractController
             'watchLaterList' => $watchLaterList
         ]);
     }
+
+
+    /**
+     * @Route("/usermovies/favorites/", name="app_usermovie_favorites")
+     */
+    public function favorites()
+    {
+        $favoritesList = $this->userMovieRepository->findBy(["user" => $this->getUser(), "favorite" => true], ["rating" => 'DESC']);
+        return $this->render('/usermovies/favorites.html.twig', [
+            'favoritesList' => $favoritesList
+        ]);
+    }
 }
