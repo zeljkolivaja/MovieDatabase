@@ -6,10 +6,14 @@ use App\Entity\UserMovie;
 use App\Repository\MovieRepository;
 use App\Repository\UserMovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+
+/**
+ * @isGranted("IS_AUTHENTICATED_REMEMBERED")
+ */
 class UserMovieRatingController extends UserMovieController
 {
 
@@ -22,7 +26,7 @@ class UserMovieRatingController extends UserMovieController
     /**
      * @Route("/usermovies/{slug}/{rating<1|2|3|4|5>}", name="app_movie_rate", methods="POST")
      */
-    public function rateMovie($slug, int $rating, UserMovieRepository $userMovieRepository, MovieRepository $movieRepository)
+    public function rateMovie($slug, int $rating, UserMovieRepository $userMovieRepository, MovieRepository $movieRepository): Response
     {
 
         $user = $this->getUser();
@@ -62,7 +66,7 @@ class UserMovieRatingController extends UserMovieController
 
 
 
-    private function userMovieRating(UserMovie $userMovie, $rating)
+    private function userMovieRating(UserMovie $userMovie, $rating): void
     {
         $userMovie->setRating($rating);
         $userMovie->setRated(true);
@@ -72,7 +76,7 @@ class UserMovieRatingController extends UserMovieController
     }
 
 
-    public static function calculateRating($totalVotes, $rating)
+    public static function calculateRating($totalVotes, $rating): float
     {
         return number_format($totalVotes / $rating, 2);
     }
