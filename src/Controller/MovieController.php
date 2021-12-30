@@ -109,7 +109,7 @@ class MovieController extends AbstractController
 
 
         if ($movie->getRating() != 0) {
-            $movieRating = UserMovieController::calculateRating($movie->getRating(), $movie->getTotalVotes());
+            $movieRating = UserMovieRatingController::calculateRating($movie->getRating(), $movie->getTotalVotes());
         } else {
             $movieRating = 0;
         }
