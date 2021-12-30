@@ -53,7 +53,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $plainPassword;
 
     /**
-     * @ORM\OneToMany(targetEntity=UserMovie::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=UserMovie::class, mappedBy="user", cascade={"remove"})
+     * @ORM\JoinColumn(nullable=false)
      */
     private $userMovies;
 

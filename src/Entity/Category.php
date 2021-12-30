@@ -39,7 +39,7 @@ class Category
     private $slug;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Movie::class, mappedBy="categories")
+     * @ORM\ManyToMany(targetEntity=Movie::class, mappedBy="categories", cascade={"remove"})
      */
     private $movies;
 

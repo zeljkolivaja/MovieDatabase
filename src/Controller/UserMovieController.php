@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\UserMovie;
 use App\Form\ReviewFormType;
 use App\Repository\MovieRepository;
+use App\Repository\UserRepository;
 use App\Repository\UserMovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -211,6 +212,8 @@ class UserMovieController extends AbstractController
         $this->addFlash('success', 'Your Review was deleted');
         return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
     }
+
+
 
     /**
      * @Route("/usermovies/favorite/{slug}", name="app_usermovie_favorite")

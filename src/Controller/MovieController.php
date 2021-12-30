@@ -26,7 +26,6 @@ class MovieController extends AbstractController
      */
     public function homepage(int $page = 1)
     {
-
         //find all released  movies, limit by 3,  sort by release date descending
         $movieQueryBuilder = $this->movieRepository->createAllReleasedQB();
 

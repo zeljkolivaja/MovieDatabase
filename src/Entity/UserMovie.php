@@ -26,7 +26,7 @@ class UserMovie
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Movie::class)
+     * @ORM\ManyToOne(targetEntity=Movie::class, inversedBy="userMovies")
      * @ORM\JoinColumn(nullable=false)
      */
     private $movie;

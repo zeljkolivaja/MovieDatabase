@@ -67,13 +67,13 @@ class Movie
 
 
     /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="Movie")
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="Movie", cascade={"remove"})
      * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $videos;
 
     /**
-     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="Movie")
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="Movie", cascade={"remove"})
      * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $images;
@@ -84,9 +84,16 @@ class Movie
     private $categories;
 
     /**
-     * @ORM\OneToMany(targetEntity=Personnel::class, mappedBy="movie")
+     * @ORM\OneToMany(targetEntity=Personnel::class, mappedBy="movie", cascade={"remove"})
      */
     private $personnels;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity=UserMovie::class, mappedBy="movie", cascade={"remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $userMovies;
 
 
     public function __construct()
