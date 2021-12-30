@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Movie;
 use App\Repository\MovieRepository;
 use App\Repository\VideoRepository;
 use App\Repository\UserMovieRepository;
@@ -71,12 +72,10 @@ class MovieController extends AbstractController
             $request->query->get('q')
         );
 
-
         return $this->render('movie/search.html.twig', [
             "movies" => $movies,
         ]);
     }
-
 
     /**
      * @Route("/movies/{slug}", name="app_movie_show")
@@ -106,7 +105,6 @@ class MovieController extends AbstractController
         if ($pagerfanta->count() == null) {
             $pagerfanta = null;
         }
-
 
         if ($movie->getRating() != 0) {
             $movieRating = UserMovieRatingController::calculateRating($movie->getRating(), $movie->getTotalVotes());

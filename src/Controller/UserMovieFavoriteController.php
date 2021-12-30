@@ -24,6 +24,18 @@ class UserMovieFavoriteController extends UserMovieController
 
 
     /**
+     * @Route("/usermovies/favorites/", name="app_usermovie_favorites")
+     */
+    public function favorites(): Response
+    {
+        $favoritesList = $this->userMovieRepository->findBy(["user" => $this->getUser(), "favorite" => true], ["rating" => 'DESC']);
+        return $this->render('/usermovies/favorites.html.twig', [
+            'favoritesList' => $favoritesList
+        ]);
+    }
+
+
+    /**
      * @Route("/usermovies/favorite/{slug}", name="app_usermovie_favorite")
      */
     public function setFavorite($slug): Response
@@ -43,17 +55,5 @@ class UserMovieFavoriteController extends UserMovieController
 
         $this->addFlash('success', 'Movie was added to your Favorites');
         return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
-    }
-
-
-    /**
-     * @Route("/usermovies/favorites/", name="app_usermovie_favorites")
-     */
-    public function favorites(): Response
-    {
-        $favoritesList = $this->userMovieRepository->findBy(["user" => $this->getUser(), "favorite" => true], ["rating" => 'DESC']);
-        return $this->render('/usermovies/favorites.html.twig', [
-            'favoritesList' => $favoritesList
-        ]);
     }
 }

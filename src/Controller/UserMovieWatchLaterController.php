@@ -7,8 +7,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\MovieRepository;
 use App\Repository\UserMovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
+/**
+ * @isGranted("IS_AUTHENTICATED_REMEMBERED")
+ */
 class UserMovieWatchLaterController extends UserMovieController
 {
     public function __construct(protected EntityManagerInterface $entityManager, protected MovieRepository $movieRepository, protected UserMovieRepository $userMovieRepository)

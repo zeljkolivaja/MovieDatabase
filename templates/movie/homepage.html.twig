@@ -47,6 +47,13 @@ MovieDB homepage
 						{% endif %}
 
 					</p>
+
+					{% if is_granted('ROLE_ADMIN') %}
+					<a class="btn btn-danger" href="{{path('app_admin_movie_delete', {'slug': movie.slug})}}">Delete
+						Movie</a>
+
+					{% endif %}
+
 				</div>
 			</div>
 		</div>
@@ -56,6 +63,7 @@ MovieDB homepage
 
 	</div>
 </div>
+
 {{pagerfanta(pagination)}}
 
 
