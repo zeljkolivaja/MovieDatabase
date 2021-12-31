@@ -21,11 +21,19 @@ class AdminMovieController extends AbstractController
     {
     }
 
+    /**
+     *@Route("admin_movie/", name="app_admin_movie_index")
+     */
+    public function index(): Response
+    {
+        return $this->render("/admin_movie/index.html.twig");
+    }
+
 
     /**
      * @Route("/movie/delete/{slug}", name="app_admin_movie_delete")
      */
-    public function delete(Movie $movie)
+    public function delete(Movie $movie): Response
     {
         $movieName = $movie->getTitle();
         $this->entityManager->remove($movie);
