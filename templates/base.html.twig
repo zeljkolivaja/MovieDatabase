@@ -47,6 +47,8 @@
 							class="nav-link" href="{{ path('app_movie_explore') }}">Explore Movies</a>
 						</li>
 
+						{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle {% if currentPath == "/usermovies/watchlater/" or currentPath == "/usermovies/favorites/" %} active {% endif %}"
 								href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -72,6 +74,7 @@
 
 							</ul>
 						</li>
+						{% endif %}
 					</ul>
 					<form action="{{path('app_movie_search')}}" class="d-flex">
 						<input class="form-control me-2" type="search" placeholder="Search" name='q' aria-label="Search"

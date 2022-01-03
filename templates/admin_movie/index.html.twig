@@ -2,6 +2,44 @@
 
 {% block title %}Admin Movie{% endblock %}
 {% block body %}
-Hello
+<br />
+
+<div>
+    <p> Hello <b>{{app.user.getDisplayName}}</b>, we have <b>{{userCount}}</b> users registered, last registered user is
+        <b>{{lastUser.getDisplayName}}</b>
+    </p>
+</div>
+
+
+Search Users
+<form action="CREATE ADMINUSER CONTROLLER" class="d-flex">
+    <input class="form-control me-2" type="search" placeholder="Search" name='q' aria-label="Search" required />
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
+<div>
+    <br />
+    <h3>Latest Movies:</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movie in pagination %}
+            <tr>
+                <td>{{movie.title }}</td>
+                <td><button class="btn btn-secondary">TEST</button></td>
+                <td><button class="btn btn-danger">TEST</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {{pagerfanta(pagination)}}
+</div>
+
 
 {% endblock %}

@@ -34,6 +34,15 @@ class MovieRepository extends ServiceEntityRepository
             ->addSelect('category');
     }
 
+
+    public function createAllMoviesQB(): QueryBuilder
+    {
+        return $this->createQueryBuilder('m')
+            ->orderBy('m.id', 'DESC')
+            ->leftJoin('m.categories', 'category')
+            ->addSelect('category');
+    }
+
     private function isReleased(QueryBuilder $qb): QueryBuilder
     {
         return $qb->andWhere("m.releaseYear <> ''");
