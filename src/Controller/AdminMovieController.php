@@ -78,11 +78,38 @@ class AdminMovieController extends AbstractController
             $movie = $form->getData();
             $this->entityManager->persist($movie);
             $this->entityManager->flush();
+            $this->addFlash('success', "Movie created");
             return $this->redirectToRoute('app_admin_movie_index');
         }
 
 
         return $this->render('admin_movie/new.html.twig', [
+            'movieForm' => $form->createView(),
+        ]);
+    }
+
+
+    /**
+     * @Route("/admin_movie/edit/{slug}", name="app_admin_movie_edit")
+     */
+    public function edit(Movie $movie, Request $request)
+    {
+        //the only difference between this and new() method code is that we pass queried Movie object to createForm(),
+        //it then populates the form fields using getters in that Movie object
+        $form = $this->createForm(MovieFormType::class, $movie);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $movie = $form->getData();
+            $this->entityManager->persist($movie);
+            $this->entityManager->flush();
+            $this->addFlash('success', "Movie updated");
+            return $this->redirectToRoute('app_admin_movie_index');
+        }
+
+
+        return $this->render('admin_movie/edit.html.twig', [
             'movieForm' => $form->createView(),
         ]);
     }

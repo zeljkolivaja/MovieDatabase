@@ -26,7 +26,7 @@ class MovieFormType extends AbstractType
             ->add('releaseYear', null, [
                 'translation_domain' => false,
                 'years' => range(date('1901'), date('Y') + 10),
-                'help' => 'Optional',
+                'help' => 'Optional, if the release year is not selected movie wont show to users',
 
             ])
             ->add('categories', null, [

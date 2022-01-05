@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block title %}Edit Movie{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="bg-light mt-4 p-4">
+            <h1>Edit Movie</h1>
+            {{ form_start(movieForm) }}
+            {{ form_row(movieForm.title, {label : "Edit title"})}}
+            {{ form_row(movieForm.storyline, {label : "Edit storyline"}) }}
+            {{ form_row(movieForm.releaseYear, {label : "Edit relase year"}) }}
+            {{ form_row(movieForm.categories, {label : "Edit categories"}) }}
+            <button type="submit" class="btn btn-primary">Edit Movie</button>
+            {{ form_end(movieForm) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -34,7 +34,8 @@ Search Users
             {% for movie in pagination %}
             <tr>
                 <td> <a href="{{path('app_movie_show', {slug : movie.slug})}}"> {{movie.title}}</a></td>
-                <td><button class="btn btn-danger">Edit Movie</button></td>
+                <td> <a class="btn btn-secondary" href="{{path('app_admin_movie_edit', {'slug': movie.slug})}}">Edit
+                        Movie</a></td>
                 <td><a class="btn btn-danger" href="{{path('app_admin_movie_delete', {'slug': movie.slug})}}">Delete
                         Movie</a></td>
             </tr>

@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
 
+
 class RegistrationController extends AbstractController
 {
     /**
@@ -25,6 +26,16 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
+
+            // //check did the user enter same password twice
+            // if ($form->get('plainPassword')->getData() !== $form->get('repeatPassword')->getData()) {
+
+            //     $this->addFlash("failed", "please enter same password in both password fields");
+
+            //     return $this->render('registration/register.html.twig', [
+            //         'registrationForm' => $form->createView(),
+            //     ]);
+            // }
             $user->setPassword(
                 $userPasswordHasherInterface->hashPassword(
                     $user,
