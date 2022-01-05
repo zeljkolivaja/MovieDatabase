@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\MovieRepository;
 
 
@@ -26,6 +27,11 @@ class Movie
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(min = 2, max = 40,
+     * minMessage = "Your title must be at least {{ limit }} characters long",
+     * maxMessage = "Your title cannot be longer than {{ limit }} characters"
+     * )
      */
     private $title;
 

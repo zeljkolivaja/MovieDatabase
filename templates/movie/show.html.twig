@@ -79,7 +79,7 @@
 {% endif %}
 
 
-{% if movie.images %}
+{% if movie.images and movie.images is not empty %}
 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
 	<div class="carousel-inner ">
 		{% for image in movie.images %}

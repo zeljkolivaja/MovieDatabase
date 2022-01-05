@@ -36,7 +36,7 @@ class UserMovieReviewController extends UserMovieController
 
         //prevent user from submiting multiple reviews
         if ($userMovie != null && $userMovie->getReview() != null) {
-            $this->addFlash('success', 'You have already rated this Movie');
+            $this->addFlash('success', 'You have already reviewed this Movie');
             return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
         }
 
