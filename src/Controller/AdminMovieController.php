@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Movie;
 use App\Entity\User;
+use App\Form\MovieFormType;
 use App\Repository\MovieRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -51,7 +52,7 @@ class AdminMovieController extends AbstractController
 
 
     /**
-     * @Route("/movie/delete/{slug}", name="app_admin_movie_delete")
+     * @Route("/admin_movie/delete/{slug}", name="app_admin_movie_delete")
      */
     public function delete(Movie $movie): Response
     {
@@ -61,6 +62,28 @@ class AdminMovieController extends AbstractController
 
 
         $this->addFlash('success', "Movie '$movieName' successfully deleted");
-        return $this->redirectToRoute('app_homepage');
+        return $this->redirectToRoute('app_admin_movie_index');
+    }
+
+    /**
+     * @Route("/admin_movie/new", name="app_admin_movie_new")
+     */
+    public function new(Request $request)
+    {
+        $form = $this->createForm(MovieFormType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $movie = $form->getData();
+            $this->entityManager->persist($movie);
+            $this->entityManager->flush();
+            return $this->redirectToRoute('app_admin_movie_index');
+        }
+
+
+        return $this->render('admin_movie/new.html.twig', [
+            'movieForm' => $form->createView(),
+        ]);
     }
 }

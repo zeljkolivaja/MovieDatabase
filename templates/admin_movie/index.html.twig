@@ -17,7 +17,9 @@ Search Users
     <button class="btn btn-outline-success" type="submit">Search</button>
 </form>
 
+<br>
 <div>
+    <a class="btn btn-primary" href="{{path('app_admin_movie_new')}}">Create New Movie</a>
     <br />
     <h3>Latest Movies:</h3>
     <table class="table table-striped">
@@ -31,9 +33,10 @@ Search Users
         <tbody>
             {% for movie in pagination %}
             <tr>
-                <td>{{movie.title }}</td>
-                <td><button class="btn btn-secondary">TEST</button></td>
-                <td><button class="btn btn-danger">TEST</button></td>
+                <td> <a href="{{path('app_movie_show', {slug : movie.slug})}}"> {{movie.title}}</a></td>
+                <td><button class="btn btn-danger">Edit Movie</button></td>
+                <td><a class="btn btn-danger" href="{{path('app_admin_movie_delete', {'slug': movie.slug})}}">Delete
+                        Movie</a></td>
             </tr>
             {% endfor %}
         </tbody>

@@ -28,6 +28,7 @@ use Zenstruck\Foundry\Proxy;
  */
 final class CategoryFactory extends ModelFactory
 {
+    private $counter = 0;
     public function __construct()
     {
         parent::__construct();
@@ -38,9 +39,8 @@ final class CategoryFactory extends ModelFactory
     protected function getDefaults(): array
     {
         $categories = ['Action', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Mystery', 'Romance', 'Thriller', 'Western'];
-
         return [
-            'name' => $categories[array_rand($categories, 1)],
+            'name' => $categories[$this->counter++],
             'createdAt' => self::faker()->dateTimeBetween('-1 year'),
         ];
     }

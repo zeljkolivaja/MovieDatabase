@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Movie{% endblock %}
+{% block body %}
+
+<h1>Create new Movie</h1>
+
+{{ form_start(movieForm) }}
+
+{{form_widget(movieForm)}}
+<input type="submit" class="btn btn-primary" value="Create Movie">
+
+{{ form_end(movieForm) }}
+
+
+{% endblock %}
