@@ -68,7 +68,7 @@ class AdminMovieController extends AbstractController
     /**
      * @Route("/admin_movie/new", name="app_admin_movie_new")
      */
-    public function new(Request $request)
+    public function new(Request $request): Response
     {
         $form = $this->createForm(MovieFormType::class);
 
@@ -92,7 +92,7 @@ class AdminMovieController extends AbstractController
     /**
      * @Route("/admin_movie/edit/{slug}", name="app_admin_movie_edit")
      */
-    public function edit(Movie $movie, Request $request)
+    public function edit(Movie $movie, Request $request): Response
     {
         //the only difference between this and new() method code is that we pass queried Movie object to createForm(),
         //it then populates the form fields using getters in that Movie object

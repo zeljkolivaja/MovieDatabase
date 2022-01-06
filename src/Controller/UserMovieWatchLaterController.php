@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Movie;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\MovieRepository;
@@ -24,9 +25,8 @@ class UserMovieWatchLaterController extends UserMovieController
     /**
      * @Route("/usermovies/watchlater/{slug}", name="app_usermovie_setwatchlater")
      */
-    public function setWatchLater($slug): Response
+    public function setWatchLater(Movie $movie): Response
     {
-        $movie = $this->movieRepository->findOneBy(["slug" => $slug]);
         $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
 
         if ($userMovie === null) {
@@ -35,7 +35,7 @@ class UserMovieWatchLaterController extends UserMovieController
             $this->addUserMovie(userMovie: $userMovie, watchLater: true);
         } elseif ($userMovie->getWatchLater() === true) {
             $this->addUserMovie(userMovie: $userMovie, watchLater: false);
-            $this->addFlash('success', 'Movie was removed from your Watch List');
+            $this->addFlash('danger', 'Movie was removed from your Watch List');
             return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
         }
 

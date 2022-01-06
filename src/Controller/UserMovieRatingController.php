@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Movie;
 use App\Entity\UserMovie;
 use App\Repository\MovieRepository;
 use App\Repository\UserMovieRepository;
@@ -26,7 +27,7 @@ class UserMovieRatingController extends UserMovieController
     /**
      * @Route("/usermovies/{slug}/{rating<1|2|3|4|5>}", name="app_movie_rate", methods="POST")
      */
-    public function rateMovie($slug, int $rating, UserMovieRepository $userMovieRepository, MovieRepository $movieRepository): Response
+    public function rateMovie(string $slug, int $rating, UserMovieRepository $userMovieRepository, MovieRepository $movieRepository): Response
     {
 
         $user = $this->getUser();
@@ -66,7 +67,7 @@ class UserMovieRatingController extends UserMovieController
 
 
 
-    private function userMovieRating(UserMovie $userMovie, $rating): void
+    private function userMovieRating(UserMovie $userMovie, int $rating): void
     {
         $userMovie->setRating($rating);
         $userMovie->setRated(true);
@@ -76,7 +77,7 @@ class UserMovieRatingController extends UserMovieController
     }
 
 
-    public static function calculateRating($totalVotes, $rating): float
+    public static function calculateRating(int $totalVotes, int $rating): float
     {
         return number_format($totalVotes / $rating, 2);
     }

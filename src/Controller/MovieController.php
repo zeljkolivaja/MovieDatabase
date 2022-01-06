@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Movie;
 use App\Repository\MovieRepository;
 use App\Repository\VideoRepository;
 use App\Repository\UserMovieRepository;
@@ -12,8 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-
+use Symfony\Component\HttpFoundation\Response;
 
 class MovieController extends AbstractController
 {
@@ -25,7 +23,7 @@ class MovieController extends AbstractController
     /**
      * @Route("/{page<\d+>}", name="app_homepage")
      */
-    public function homepage(int $page = 1)
+    public function homepage(int $page = 1): Response
     {
         //find all released  movies, limit by 3,  sort by release date descending
         $movieQueryBuilder = $this->movieRepository->createAllReleasedQB();
@@ -44,7 +42,7 @@ class MovieController extends AbstractController
     /**
      * @Route("/movies/explore", name="app_movie_explore")
      */
-    public function exploreMovies(VideoRepository $videos)
+    public function exploreMovies(VideoRepository $videos): Response
     {
         //TODO most voted movies/ best rated movies, best rated movies by genre, newest movies
         $movies = $this->movieRepository->findMostVotedMovies(10);
@@ -60,7 +58,7 @@ class MovieController extends AbstractController
     /**
      * @Route("/movies/search", name="app_movie_search")
      */
-    public function search(Request $request)
+    public function search(Request $request): Response
     {
 
         //if user entered nothing in search field prevent the search
@@ -80,7 +78,7 @@ class MovieController extends AbstractController
     /**
      * @Route("/movies/{slug}", name="app_movie_show")
      */
-    public function show($slug, Request $request, UserMovieRepository $userMovieRepository)
+    public function show($slug, Request $request, UserMovieRepository $userMovieRepository): Response
     {
 
         //find movie to display on show page, join with category and personnel

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Movie;
 use App\Form\ReviewFormType;
 use App\Repository\MovieRepository;
 use App\Repository\UserMovieRepository;
@@ -29,9 +30,8 @@ class UserMovieReviewController extends UserMovieController
     /**
      * @Route("/usermovies/review/{slug}", name="app_usermovies_review")
      */
-    public function review($slug, Request $request): Response
+    public function review(Movie $movie, Request $request): Response
     {
-        $movie = $this->movieRepository->findOneBy(["slug" => $slug]);
         $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
 
         //prevent user from submiting multiple reviews
@@ -68,9 +68,8 @@ class UserMovieReviewController extends UserMovieController
     /**
      * @Route("/usermovies/editReview/{slug}", name="app_usermovies_editReview")
      */
-    public function editReview($slug, Request $request): Response
+    public function editReview(Movie $movie, Request $request): Response
     {
-        $movie = $this->movieRepository->findOneBy(["slug" => $slug]);
         $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
 
         //prevent user from editing if he has no review already submitted
@@ -109,11 +108,9 @@ class UserMovieReviewController extends UserMovieController
     /**
      * @Route("/usermovies/delete/{slug}", name="app_usermovie_deleteReview")
      */
-    public function deleteReview($slug)
+    public function deleteReview(Movie $movie)
     {
-        $movie = $this->movieRepository->findOneBy(["slug" => $slug]);
         $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
-
         $userMovie->setReview(NULL);
         $this->entityManager->persist($userMovie);
         $this->entityManager->flush();

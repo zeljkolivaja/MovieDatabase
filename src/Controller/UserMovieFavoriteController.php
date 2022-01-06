@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Movie;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,9 +39,9 @@ class UserMovieFavoriteController extends UserMovieController
     /**
      * @Route("/usermovies/favorite/{slug}", name="app_usermovie_favorite")
      */
-    public function setFavorite($slug): Response
+    public function setFavorite(Movie $movie): Response
     {
-        $movie = $this->movieRepository->findOneBy(["slug" => $slug]);
+
         $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
 
         if ($userMovie === null) {
