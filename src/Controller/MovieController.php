@@ -1,5 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
+
 namespace App\Controller;
 
 use App\Repository\MovieRepository;
@@ -78,7 +81,7 @@ class MovieController extends AbstractController
     /**
      * @Route("/movies/{slug}", name="app_movie_show")
      */
-    public function show($slug, Request $request, UserMovieRepository $userMovieRepository): Response
+    public function show(string $slug, Request $request, UserMovieRepository $userMovieRepository): Response
     {
 
         //find movie to display on show page, join with category and personnel

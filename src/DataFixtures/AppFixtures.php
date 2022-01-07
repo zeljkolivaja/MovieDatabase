@@ -47,8 +47,8 @@ class AppFixtures extends Fixture
         //create 50 users
         UserFactory::createMany(50);
 
-        //create 250 join tables between random users and movies
-        UserMovieFactory::createMany(250, function () {
+        //create 400 join tables between random users and movies
+        UserMovieFactory::createMany(400, function () {
             return [
                 "user" => UserFactory::random(),
                 "movie" => MovieFactory::random(),
@@ -67,12 +67,12 @@ class AppFixtures extends Fixture
         });
 
 
-        //create 20 movies that are not released (releaseDate set to null for now,
+        //create 5 movies that are not released (releaseDate set to null for now,
         //TODO maybe add new field "released" with boolean, since maybe we will allow movies to have release date in the future)
         //assign them to random category and create two images for each
         MovieFactory::new()
             ->notReleased()
-            ->many(20)
+            ->many(5)
             ->create(function () {
                 return [
                     'categories' => CategoryFactory::randomRange(1, 5),
@@ -81,10 +81,10 @@ class AppFixtures extends Fixture
             });
 
 
-        //create 40 movies that have no rating
+        //create 10 movies that have no rating
         MovieFactory::new()
             ->notRated()
-            ->many(40)
+            ->many(10)
             ->create(function () {
                 return [
                     'categories' => CategoryFactory::randomRange(1, 5),

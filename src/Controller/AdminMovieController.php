@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Movie;
@@ -40,7 +42,7 @@ class AdminMovieController extends AbstractController
             new QueryAdapter($movieQueryBuilder)
         );
         $pagerfanta->setMaxPerPage(10);
-        $pagerfanta->setCurrentPage($request->query->get("page", 1));
+        $pagerfanta->setCurrentPage((int)$request->query->get("page", 1));
 
 
         return $this->render('admin_movie/index.html.twig', [

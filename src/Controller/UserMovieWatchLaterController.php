@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Movie;
@@ -49,7 +51,6 @@ class UserMovieWatchLaterController extends UserMovieController
     public function watchLater(): Response
     {
         $watchLaterList = $this->userMovieRepository->findBy(["user" => $this->getUser(), "watchLater" => true], ["rating" => 'DESC']);
-        // dd($watchLaterList);
 
         return $this->render('/usermovies/watchlater.html.twig', [
             'watchLaterList' => $watchLaterList

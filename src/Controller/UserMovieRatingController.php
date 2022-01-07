@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Movie;
@@ -77,8 +79,8 @@ class UserMovieRatingController extends UserMovieController
     }
 
 
-    public static function calculateRating(int $totalVotes, int $rating): float
+    public static function calculateRating(float $rating,  int $totalVotes): string
     {
-        return number_format($totalVotes / $rating, 2);
+        return number_format($rating / $totalVotes, 2);
     }
 }

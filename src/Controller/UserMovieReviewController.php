@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+
+
 namespace App\Controller;
 
 use App\Entity\Movie;
@@ -108,7 +112,7 @@ class UserMovieReviewController extends UserMovieController
     /**
      * @Route("/usermovies/delete/{slug}", name="app_usermovie_deleteReview")
      */
-    public function deleteReview(Movie $movie)
+    public function deleteReview(Movie $movie): Response
     {
         $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
         $userMovie->setReview(NULL);
