@@ -50,7 +50,7 @@ class UserMovieWatchLaterController extends UserMovieController
      */
     public function watchLater(): Response
     {
-        $watchLaterList = $this->userMovieRepository->findBy(["user" => $this->getUser(), "watchLater" => true], ["rating" => 'DESC']);
+        $watchLaterList = $this->userMovieRepository->findBy(["user" => $this->getUser(), "watchLater" => true]);
 
         return $this->render('/usermovies/watchlater.html.twig', [
             'watchLaterList' => $watchLaterList

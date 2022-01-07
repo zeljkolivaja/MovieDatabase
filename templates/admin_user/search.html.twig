@@ -1,0 +1,64 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Search results{% endblock %}
+
+{% block body %}
+
+<h3>
+    Search results
+</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">
+                #
+            </th>
+            <th scope="col">
+                User email
+            </th>
+            <th scope="col">
+                First Name
+            </th>
+            <th scope="col">
+                Last Name
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% set counter = 0 %}
+
+            {% for user in users %}
+            {% set counter = counter + 1 %}
+
+            <td>
+                {{ counter }}
+            </td>
+
+            <td>
+                <a href="#">
+                    {{ user.email }}
+                </a>
+            </td>
+
+            <td>
+                {% if user.firstName is not null and user.firstName is defined %}
+                {{ user.firstName }}
+                {% else %}
+                First Name not defined
+                {% endif %}
+            </td>
+
+            <td>
+                {% if user.lastName is not null and user.lastName is defined %}
+                {{ user.lastName }}
+                {% else %}
+                Last Name not defined
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+    {% endfor %}
+</table>
+{% endblock %}

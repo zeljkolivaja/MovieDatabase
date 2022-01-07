@@ -29,12 +29,12 @@
 	<tbody>
 		<tr>
 			{% set counter = 0 %}
-			{% for movie in movies %}
 
+			{% for movie in movies %}
 			{% set counter = counter + 1 %}
-			<th scope="row">
+			<td>
 				{{ counter }}
-			</th>
+			</td>
 			<td>
 				<a href="{{ path('app_movie_show',{slug: movie.slug} ) }}">
 					{{ movie.title }}
@@ -51,7 +51,7 @@
 				{% endif %}
 			</td>
 		</tr>
-		</tr>
 	</tbody>
 	{% endfor %}
-</table>{% endblock %}
+</table>
+{% endblock %}

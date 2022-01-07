@@ -27,4 +27,13 @@ class UserRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    public function search($q): ?array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.email LIKE :searchTerm OR u.firstName LIKE :searchTerm OR u.lastName LIKE :searchTerm')
+            ->setParameter('searchTerm', '%' . $q . '%')
+            ->getQuery()
+            ->getResult();
+    }
 }

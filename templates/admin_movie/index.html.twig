@@ -3,7 +3,7 @@
 {% block title %}Admin Movie{% endblock %}
 {% block body %}
 <br />
-
+<h3>Administer users</h3>
 <div>
     <p> Hello <b>{{app.user.getDisplayName}}</b>, we have <b>{{userCount}}</b> users registered, last registered user is
         <b>{{lastUser.getDisplayName}}</b>
@@ -11,8 +11,8 @@
 </div>
 
 
-Search Users
-<form action="CREATE ADMINUSER CONTROLLER" class="d-flex">
+Search Users by email, first name or last name
+<form action="{{path('app_admin_user_search')}}" class="d-flex">
     <input class="form-control me-2" type="search" placeholder="Search" name='q' aria-label="Search" required />
     <button class="btn btn-outline-success" type="submit">Search</button>
 </form>
@@ -20,6 +20,7 @@ Search Users
 <br>
 <div>
     <a class="btn btn-primary" href="{{path('app_admin_movie_new')}}">Create New Movie</a>
+    <br />
     <br />
     <h3>Latest Movies:</h3>
     <table class="table table-striped">
