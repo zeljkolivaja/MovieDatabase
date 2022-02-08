@@ -45,37 +45,19 @@
 					{% endif %}
 				</p>
 				{% include 'movie/includes/rating.html.twig' %}
+				{% include 'movie/includes/adminEditDelLinks.html.twig' %}
+				{% include 'movie/includes/favoriteWatchListLinks.html.twig' %}
+
+
+
+
+
 			</div>
 		</div>
 	</div>
 </div>
 
 
-
-{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-{% if is_granted('FAVORITE_TRUE', userData) %}
-<p>
-	<a class="btn btn-danger" href="{{path('app_usermovie_favorite', {'slug': movie.slug})}}">Remove from favorites</a>
-</p>
-{% else %}
-<p><a class="btn btn-success" href="{{path('app_usermovie_favorite', {'slug': movie.slug})}}">Add to favorites</a>
-</p>
-{% endif %}
-{% endif %}
-
-
-{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-{% if is_granted('WATCHLATER_TRUE', userData) %}
-<p>
-	<a class="btn btn-danger" href="{{path('app_usermovie_setwatchlater', {'slug': movie.slug})}}">Remove from
-		Watch Later list</a>
-</p>
-{% else %}
-<p><a class="btn btn-success" href="{{path('app_usermovie_setwatchlater', {'slug': movie.slug})}}">Add to
-		Watch Later list</a>
-</p>
-{% endif %}
-{% endif %}
 
 
 {% if movie.images and movie.images is not empty %}

@@ -100,7 +100,7 @@ class MovieController extends AbstractController
             new QueryAdapter($reviewQueryBuilder)
         );
         $pagerfanta->setMaxPerPage(3);
-        $pagerfanta->setCurrentPage($request->query->get("page", 1));
+        $pagerfanta->setCurrentPage((int)$request->query->get("page", 1));
 
         //if no reviews found set pagerfanta object to null
         if ($pagerfanta->count() == null) {

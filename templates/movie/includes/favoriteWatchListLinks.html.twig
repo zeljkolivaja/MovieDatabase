@@ -1,0 +1,29 @@
+{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+{% if is_granted('FAVORITE_TRUE', userData) %}
+
+<a class="btn btn-danger" href="{{path('app_usermovie_favorite', {'slug': movie.slug})}}">Remove from
+    favorites</a>
+
+{% else %}
+
+<a class="btn btn-success" href="{{path('app_usermovie_favorite', {'slug': movie.slug})}}">Add to
+    favorites</a>
+
+{% endif %}
+{% endif %}
+
+
+{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+{% if is_granted('WATCHLATER_TRUE', userData) %}
+
+<a class="btn btn-danger" href="{{path('app_usermovie_setwatchlater', {'slug': movie.slug})}}">Remove
+    from
+    Watch Later list</a>
+
+{% else %}
+
+<a class="btn btn-success" href="{{path('app_usermovie_setwatchlater', {'slug': movie.slug})}}">Add to
+    Watch Later list</a>
+
+{% endif %}
+{% endif %}

@@ -25,7 +25,7 @@ class UserMovieController extends AbstractController
     {
     }
 
-    protected function addUserMovie(User $user = null, Movie $movie = null, UserMovie $userMovie = null, array $data = null, bool $favorite = null, bool $watchLater = null): void
+    protected function addUserMovie(User $user = null, Movie $movie = null, UserMovie $userMovie = null, array $reviewData = null, bool $favorite = null, bool $watchLater = null): void
     {
 
         if ($userMovie === null) {
@@ -47,9 +47,9 @@ class UserMovieController extends AbstractController
         }
 
 
-        if ($data != null) {
-            $userMovie->setReviewTitle($data['reviewTitle']);
-            $userMovie->setReview($data['review']);
+        if ($reviewData != null) {
+            $userMovie->setReviewTitle($reviewData['reviewTitle']);
+            $userMovie->setReview($reviewData['review']);
         }
 
         $this->entityManager->persist($userMovie);

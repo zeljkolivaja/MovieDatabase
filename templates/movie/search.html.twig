@@ -24,25 +24,38 @@
 			<th scope="col">
 				User rating
 			</th>
+			{% if is_granted('ROLE_ADMIN') %}
+
+			<th scope="col">
+				Edit movie
+			</th>
+			<th scope="col">
+				Delete movie
+			</th>
+
+			{% endif %}
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
 			{% set counter = 0 %}
-
 			{% for movie in movies %}
 			{% set counter = counter + 1 %}
+
 			<td>
 				{{ counter }}
 			</td>
+
 			<td>
 				<a href="{{ path('app_movie_show',{slug: movie.slug} ) }}">
 					{{ movie.title }}
 				</a>
 			</td>
+
 			<td>
 				{{ movie.totalVotes }}
 			</td>
+
 			<td>
 				{% if movie.rating is not null %}
 				{{ (movie.rating / movie.totalVotes)| number_format(2) }}
@@ -50,6 +63,18 @@
 				No rating yet
 				{% endif %}
 			</td>
+
+			{% if is_granted('ROLE_ADMIN') %}
+
+			<td> <a class="btn btn-secondary" href="{{path('app_admin_movie_edit', {'slug': movie.slug})}}">Edit
+					Movie</a></td>
+			<td><a class="btn btn-danger" href="{{path('app_admin_movie_delete', {'slug': movie.slug})}}">Delete
+					Movie</a></td>
+
+			{% endif %}
+
+
+
 		</tr>
 	</tbody>
 	{% endfor %}

@@ -55,9 +55,9 @@ class UserMovieReviewController extends UserMovieController
             $movie = $this->movieRepository->findOneBy(["slug" => $data['movie']]);
             //if the userMovie entity is null, create new one, else update the one we already found
             if ($userMovie == null) {
-                $this->addUserMovie(user: $this->getUser(), movie: $movie, data: $data);
+                $this->addUserMovie(user: $this->getUser(), movie: $movie, reviewData: $data);
             } else {
-                $this->addUserMovie(userMovie: $userMovie, data: $data);
+                $this->addUserMovie(userMovie: $userMovie, reviewData: $data);
             }
             $this->addFlash('success', 'Your Review has been published');
             return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
@@ -94,9 +94,9 @@ class UserMovieReviewController extends UserMovieController
 
             //if the userMovie entity is null, create new one, else update the one we already found
             if ($userMovie == null) {
-                $this->addUserMovie(user: $this->getUser(), movie: $movie, data: $data);
+                $this->addUserMovie(user: $this->getUser(), movie: $movie, reviewData: $data);
             } else {
-                $this->addUserMovie(userMovie: $userMovie, data: $data);
+                $this->addUserMovie(userMovie: $userMovie, reviewData: $data);
             }
             $this->addFlash('success', 'Your Review has been published');
             return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
