@@ -34,7 +34,7 @@ class MovieController extends AbstractController
         $pagerfanta = new Pagerfanta(
             new QueryAdapter($movieQueryBuilder)
         );
-        $pagerfanta->setMaxPerPage(3);
+        $pagerfanta->setMaxPerPage(4);
         $pagerfanta->setCurrentPage($page);
 
         return $this->render('movie/homepage.html.twig', [

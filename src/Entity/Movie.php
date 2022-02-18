@@ -101,6 +101,11 @@ class Movie
      */
     private $userMovies;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $poster;
+
 
     public function __construct()
     {
@@ -323,6 +328,18 @@ class Movie
                 $personnel->setMovie(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPoster(): ?string
+    {
+        return $this->poster;
+    }
+
+    public function setPoster(string $poster): self
+    {
+        $this->poster = $poster;
 
         return $this;
     }

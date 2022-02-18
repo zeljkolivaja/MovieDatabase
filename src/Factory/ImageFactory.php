@@ -37,7 +37,10 @@ final class ImageFactory extends ModelFactory
 
     protected function getDefaults(): array
     {
-        $exampleImg = ['img1.jpg', 'img2.jpg', 'img3.jpg', 'img4.jpg', 'img5.jpg'];
+        $exampleImg = scandir(__DIR__ . '/../' . '../public/images/');
+        $exampleImg = (array_filter($exampleImg, function ($var) {
+            return (stripos($var, 'img') !== false);
+        }));
 
         return [
             // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)

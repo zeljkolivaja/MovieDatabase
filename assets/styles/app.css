@@ -11,3 +11,7 @@
      margin-right: auto;
      display: block;
  }
+
+ .pagination-custom {
+     margin-top: 20px;
+ }

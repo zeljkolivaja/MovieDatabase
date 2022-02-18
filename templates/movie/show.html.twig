@@ -10,7 +10,7 @@
 <div class="card mb-3" style="max-width: 100%;">
 	<div class="row no-gutters">
 		<div class="col-md-4">
-			<a href="{{path('app_movie_show',{slug: movie.slug} )}}"><img src="{{asset('images/img1.jpg')}}"
+			<a href="{{path('app_movie_show',{slug: movie.slug} )}}"><img src="{{asset('images/'~ movie.poster ~'')}}"
 					class="card-img" alt="..."></a>
 		</div>
 		<div class="col-md-8">

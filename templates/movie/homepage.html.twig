@@ -6,26 +6,21 @@ MovieDB homepage
 
 {% block body %}
 
-<div>
-	<div class="row">
-		<div style="padding-top: 2%;">
-			<h3>
-				Newest movies
-				<p>
-					<small class="text-muted">Check out the newest releases</small>
-				</p>
-			</h3>
+<div style="padding-top: 2%;">
 
-		</div>
-	</div>
+	<h3>Newest movies</h3>
+	<h5>Check out the newest releases<h5>
 </div>
+
+
 <div class="card-group">
 	<div class="row ">
 		{% for movie in pagination %}
-		<div class="col-lg-4 col-sm-12">
+		<div class="col-sm-12 col-md-6 col-lg-3">
 			<div class="card">
-				<a href="{{path('app_movie_show',{slug: movie.slug} )}}"><img src="{{asset('images/img1.jpg')}}"
-						class="card-img-top" alt="..."></a>
+				<a href="{{path('app_movie_show',{slug: movie.slug} )}}"><img
+						src="{{asset('images/'~ movie.poster ~'')}}" class="card-img-top" alt="..."></a>
+
 				<div class="card-body">
 					<h5 class="card-title">{{movie.title}}</h5>
 					<p class="card-text">{{movie.storyline|u.truncate(90,'...',false)}}</p>
@@ -44,23 +39,20 @@ MovieDB homepage
 						<small class="text-muted">Release year : To be announced
 						</small>
 						{% endif %}
-
 					</p>
 
 					{% include 'movie/includes/adminEditDelLinks.html.twig' %}
-
 				</div>
 			</div>
 		</div>
-
-
 		{% endfor %}
 
 	</div>
 </div>
 
-{{pagerfanta(pagination)}}
-
+<div class="pagination-custom">
+	{{pagerfanta(pagination)}}
+</div>
 
 
 </div>{% endblock %}

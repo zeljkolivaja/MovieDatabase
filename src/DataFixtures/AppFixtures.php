@@ -39,7 +39,7 @@ class AppFixtures extends Fixture
         MovieFactory::createMany(50, function () {
             return [
                 'categories' => CategoryFactory::randomRange(1, 3),
-                'images' => ImageFactory::new()->many(2),
+                'images' => ImageFactory::new()->many(5),
             ];
         });
 

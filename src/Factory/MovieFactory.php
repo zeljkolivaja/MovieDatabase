@@ -51,6 +51,12 @@ final class MovieFactory extends ModelFactory
     {
         $PG = ['G', 'PG', 'PG-13', 'R', 'NC-17'];
 
+        $exampleImg = scandir(__DIR__ . '/../' . '../public/images/');
+        $exampleImg = (array_filter($exampleImg, function ($var) {
+            return (stripos($var, 'poster') !== false);
+        }));
+
+
         return [
             'title' => self::faker()->realText(20),
             'releaseYear' => self::faker()->dateTimeBetween('-100 years', '-1 minute'),
@@ -59,8 +65,12 @@ final class MovieFactory extends ModelFactory
             'PG' => $PG[array_rand($PG, 1)],
             'rating' => rand(70, 100),
             'totalVotes' => rand(20, 100),
+            'poster' => $exampleImg[array_rand($exampleImg, 1)],
         ];
     }
+
+
+
 
     protected function initialize(): self
     {
