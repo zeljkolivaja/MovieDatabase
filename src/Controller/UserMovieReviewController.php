@@ -36,7 +36,7 @@ class UserMovieReviewController extends UserMovieController
      */
     public function review(Movie $movie, Request $request): Response
     {
-        $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
+        $userMovie = $this->getUserMovie($movie);
 
         //prevent user from submiting multiple reviews
         if ($userMovie != null && $userMovie->getReview() != null) {
@@ -55,9 +55,9 @@ class UserMovieReviewController extends UserMovieController
             $movie = $this->movieRepository->findOneBy(["slug" => $data['movie']]);
             //if the userMovie entity is null, create new one, else update the one we already found
             if ($userMovie == null) {
-                $this->addUserMovie(user: $this->getUser(), movie: $movie, reviewData: $data);
+                $this->addReview($movie, $data);
             } else {
-                $this->addUserMovie(userMovie: $userMovie, reviewData: $data);
+                $this->addReview(data: $data, userMovie: $userMovie,);
             }
             $this->addFlash('success', 'Your Review has been published');
             return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
@@ -69,12 +69,28 @@ class UserMovieReviewController extends UserMovieController
         ]);
     }
 
+
+    private function addReview($data, $movie = null, $userMovie = null)
+    {
+        if ($userMovie === null) {
+            $userMovie = $this->getUserMovie($movie)
+                ->setReviewTitle($data['reviewTitle'])
+                ->setReview($data['review']);
+        } else {
+            $userMovie->setReviewTitle($data['reviewTitle'])
+                ->setReview($data['review']);
+        }
+
+        $this->saveUserMovie($userMovie);
+    }
+
+
     /**
      * @Route("/usermovies/editReview/{slug}", name="app_usermovies_editReview")
      */
     public function editReview(Movie $movie, Request $request): Response
     {
-        $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
+        $userMovie = $this->getUserMovie($movie);
 
         //prevent user from editing if he has no review already submitted
         if ($userMovie == null or $userMovie->getReview() == null) {
@@ -87,18 +103,11 @@ class UserMovieReviewController extends UserMovieController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $data = $form->getData();
             //find the movie user wishes to review
             $movie = $this->movieRepository->findOneBy(["slug" => $data['movie']]);
-
-            //if the userMovie entity is null, create new one, else update the one we already found
-            if ($userMovie == null) {
-                $this->addUserMovie(user: $this->getUser(), movie: $movie, reviewData: $data);
-            } else {
-                $this->addUserMovie(userMovie: $userMovie, reviewData: $data);
-            }
-            $this->addFlash('success', 'Your Review has been published');
+            $this->addReview(data: $data, userMovie: $userMovie,);
+            $this->addFlash('success', 'Your Review has been updated');
             return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
         }
 
@@ -114,11 +123,10 @@ class UserMovieReviewController extends UserMovieController
      */
     public function deleteReview(Movie $movie): Response
     {
-        $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
-        $userMovie->setReview(NULL);
-        $this->entityManager->persist($userMovie);
-        $this->entityManager->flush();
-        $this->addFlash('success', 'Your Review was deleted');
+        $userMovie = $this->getUserMovie($movie)->setReview(NULL);
+        $this->saveUserMovie($userMovie);
+
+        $this->addFlash('danger', 'Your Review was deleted');
         return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
     }
 }

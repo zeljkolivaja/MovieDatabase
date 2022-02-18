@@ -1,12 +1,12 @@
 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 {% if is_granted('FAVORITE_TRUE', userData) %}
 
-<a class="btn btn-danger" href="{{path('app_usermovie_favorite', {'slug': movie.slug})}}">Remove from
+<a class="btn btn-danger" href="{{path('app_usermovie_removefavorite', {'slug': movie.slug})}}">Remove from
     favorites</a>
 
 {% else %}
 
-<a class="btn btn-success" href="{{path('app_usermovie_favorite', {'slug': movie.slug})}}">Add to
+<a class="btn btn-success" href="{{path('app_usermovie_addfavorite', {'slug': movie.slug})}}">Add to
     favorites</a>
 
 {% endif %}
@@ -16,13 +16,13 @@
 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 {% if is_granted('WATCHLATER_TRUE', userData) %}
 
-<a class="btn btn-danger" href="{{path('app_usermovie_setwatchlater', {'slug': movie.slug})}}">Remove
+<a class="btn btn-danger" href="{{path('app_usermovie_removewatchlater', {'slug': movie.slug})}}">Remove
     from
     Watch Later list</a>
 
 {% else %}
 
-<a class="btn btn-success" href="{{path('app_usermovie_setwatchlater', {'slug': movie.slug})}}">Add to
+<a class="btn btn-success" href="{{path('app_usermovie_addwatchlater', {'slug': movie.slug})}}">Add to
     Watch Later list</a>
 
 {% endif %}

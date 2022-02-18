@@ -32,18 +32,13 @@ class UserMovieRatingController extends UserMovieController
     public function rateMovie(string $slug, int $rating, UserMovieRepository $userMovieRepository, MovieRepository $movieRepository): Response
     {
 
-        $user = $this->getUser();
         $movie = $movieRepository->findOneBy(['slug' => $slug]);
-        //try to find the relation between user and movie
-        $userMovie = $userMovieRepository->findOneBy(["user" => $user, "movie" => $movie]);
-        //if there is no relation between user and movie create one
-        if ($userMovie == null) {
-            $this->addUserMovie($user, $movie);
-            $userMovie = $userMovieRepository->findOneBy(["user" => $user, "movie" => $movie]);
-        }
+        $userMovie = $this->getUserMovie($movie);
+
 
         //check if the user already rated movie, if not proceed to rate the movie
         //(because userMovie relation can also be created without rating, by adding the movie to favorites or watchLater list)
+
         if (!$userMovie->getRated()) {
             $newRating = $movie->getRating() + $rating;
             $newTotalVotes = $movie->getTotalVotes() + 1;
@@ -60,7 +55,7 @@ class UserMovieRatingController extends UserMovieController
             $this->entityManager->persist($movie);
             $this->entityManager->flush();
         } else {
-            $movieRating = $this->calculateRating($movie->getRating(), $movie->getTotalVotes());
+            $movieRating = self::calculateRating($movie->getRating(), $movie->getTotalVotes());
         }
 
         //return movie rating for ajax

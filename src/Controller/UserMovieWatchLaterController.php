@@ -25,27 +25,6 @@ class UserMovieWatchLaterController extends UserMovieController
 
 
     /**
-     * @Route("/usermovies/watchlater/{slug}", name="app_usermovie_setwatchlater")
-     */
-    public function setWatchLater(Movie $movie): Response
-    {
-        $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
-
-        if ($userMovie === null) {
-            $this->addUserMovie(user: $this->getUser(), movie: $movie, watchLater: true);
-        } elseif ($userMovie->getWatchLater() === false) {
-            $this->addUserMovie(userMovie: $userMovie, watchLater: true);
-        } elseif ($userMovie->getWatchLater() === true) {
-            $this->addUserMovie(userMovie: $userMovie, watchLater: false);
-            $this->addFlash('danger', 'Movie was removed from your Watch List');
-            return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
-        }
-
-        $this->addFlash('success', 'Movie was added to your Watch List');
-        return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
-    }
-
-    /**
      * @Route("/usermovies/watchlater/", name="app_usermovie_watchlater")
      */
     public function watchLater(): Response
@@ -55,5 +34,29 @@ class UserMovieWatchLaterController extends UserMovieController
         return $this->render('/usermovies/watchlater.html.twig', [
             'watchLaterList' => $watchLaterList
         ]);
+    }
+
+    /**
+     * @Route("usermovies/addWatchLater{slug}", name="app_usermovie_addwatchlater")
+     */
+    public function addWatchLater(Movie $movie): Response
+    {
+        $userMovie = $this->getUserMovie($movie)->setWatchLater(true);
+        $this->saveUserMovie($userMovie);
+
+        $this->addFlash('success', 'Movie was added to your Watch List');
+        return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
+    }
+
+    /**
+     * @Route("usermovies/removeWatchLater{slug}", name="app_usermovie_removewatchlater")
+     */
+    public function removeWatchLater(Movie $movie): Response
+    {
+        $userMovie = $this->getUserMovie($movie)->setWatchLater(false);
+        $this->saveUserMovie($userMovie);
+
+        $this->addFlash('danger', 'Movie was removed from your Watch List');
+        return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
     }
 }

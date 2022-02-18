@@ -25,33 +25,23 @@ class UserMovieController extends AbstractController
     {
     }
 
-    protected function addUserMovie(User $user = null, Movie $movie = null, UserMovie $userMovie = null, array $reviewData = null, bool $favorite = null, bool $watchLater = null): void
+    protected function getUserMovie($movie, $userMovie = null): UserMovie
     {
+        $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
+
 
         if ($userMovie === null) {
             $userMovie = new UserMovie;
-            $userMovie->setUser($user);
+            $userMovie->setUser($this->getUser());
             $userMovie->setMovie($movie);
         }
 
-        if ($favorite === true) {
-            $userMovie->setFavorite(true);
-        } elseif ($favorite === false) {
-            $userMovie->setFavorite(false);
-        }
-
-        if ($watchLater === true) {
-            $userMovie->setWatchLater(true);
-        } elseif ($watchLater === false) {
-            $userMovie->setWatchLater(false);
-        }
+        return $userMovie;
+    }
 
 
-        if ($reviewData != null) {
-            $userMovie->setReviewTitle($reviewData['reviewTitle']);
-            $userMovie->setReview($reviewData['review']);
-        }
-
+    public function saveUserMovie($userMovie)
+    {
         $this->entityManager->persist($userMovie);
         $this->entityManager->flush();
     }

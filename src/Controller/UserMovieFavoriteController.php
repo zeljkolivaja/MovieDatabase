@@ -38,24 +38,27 @@ class UserMovieFavoriteController extends UserMovieController
 
 
     /**
-     * @Route("/usermovies/favorite/{slug}", name="app_usermovie_favorite")
+     * @Route("/usermovies/addFavorite/{slug}", name="app_usermovie_addfavorite")
      */
-    public function setFavorite(Movie $movie): Response
+    public function addFavorite(Movie $movie): Response
     {
-
-        $userMovie = $this->userMovieRepository->findOneBy(["user" => $this->getUser(), "movie" => $movie]);
-
-        if ($userMovie === null) {
-            $this->addUserMovie(user: $this->getUser(), movie: $movie, favorite: true);
-        } elseif ($userMovie->getFavorite() === false) {
-            $this->addUserMovie(userMovie: $userMovie, favorite: true);
-        } elseif ($userMovie->getFavorite() === true) {
-            $this->addUserMovie(userMovie: $userMovie, favorite: false);
-            $this->addFlash('success', 'Movie was removed from your Favorites');
-            return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
-        }
+        $userMovie = $this->getUserMovie($movie)->setFavorite(true);
+        $this->saveUserMovie($userMovie);
 
         $this->addFlash('success', 'Movie was added to your Favorites');
+        return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
+    }
+
+
+    /**
+     * @Route("/usermovies/removeFavorite/{slug}", name="app_usermovie_removefavorite")
+     */
+    public function removeFavorite(Movie $movie): Response
+    {
+        $userMovie = $this->getUserMovie($movie)->setFavorite(false);
+        $this->saveUserMovie($userMovie);
+
+        $this->addFlash('danger', 'Movie was removed from your Favorites');
         return $this->redirectToRoute('app_movie_show', ["slug" => $movie->getSlug()]);
     }
 }
