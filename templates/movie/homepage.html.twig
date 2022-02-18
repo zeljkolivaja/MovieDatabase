@@ -12,41 +12,42 @@ MovieDB homepage
 	<h5>Check out the newest releases<h5>
 </div>
 
+<div class="container">
+	<div class="card-group">
+		<div class="row ">
+			{% for movie in pagination %}
+			<div class="col-md-12 col-lg-3">
+				<div class="card">
+					<a href="{{path('app_movie_show',{slug: movie.slug} )}}"><img
+							src="{{asset('images/'~ movie.poster ~'')}}" class="card-img-top" alt="..."></a>
 
-<div class="card-group">
-	<div class="row ">
-		{% for movie in pagination %}
-		<div class="col-sm-12 col-md-6 col-lg-3">
-			<div class="card">
-				<a href="{{path('app_movie_show',{slug: movie.slug} )}}"><img
-						src="{{asset('images/'~ movie.poster ~'')}}" class="card-img-top" alt="..."></a>
+					<div class="card-body">
+						<h5 class="card-title">{{movie.title}}</h5>
+						<p class="card-text">{{movie.storyline|u.truncate(90,'...',false)}}</p>
+						<p class="card-text">
+							<small class="text-muted">Categories :
+								{% for category in movie.categories %}
+								<span class="badge rounded-pill bg-light text-dark">{{category.name}}</span>
+								{% endfor %}
+							</small>
+							<br />
 
-				<div class="card-body">
-					<h5 class="card-title">{{movie.title}}</h5>
-					<p class="card-text">{{movie.storyline|u.truncate(90,'...',false)}}</p>
-					<p class="card-text">
-						<small class="text-muted">Categories :
-							{% for category in movie.categories %}
-							<span class="badge rounded-pill bg-light text-dark">{{category.name}}</span>
-							{% endfor %}
-						</small>
-						<br />
+							{% if movie.releaseYear %}
+							<small class="text-muted">Release year :
+								{{movie.releaseYear|date('Y')}}</small>
+							{% else %}
+							<small class="text-muted">Release year : To be announced
+							</small>
+							{% endif %}
+						</p>
 
-						{% if movie.releaseYear %}
-						<small class="text-muted">Release year :
-							{{movie.releaseYear|date('Y')}}</small>
-						{% else %}
-						<small class="text-muted">Release year : To be announced
-						</small>
-						{% endif %}
-					</p>
-
-					{% include 'movie/includes/adminEditDelLinks.html.twig' %}
+						{% include 'movie/includes/adminEditDelLinks.html.twig' %}
+					</div>
 				</div>
 			</div>
-		</div>
-		{% endfor %}
+			{% endfor %}
 
+		</div>
 	</div>
 </div>
 
