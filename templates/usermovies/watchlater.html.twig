@@ -1,12 +1,8 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Watch Later List
-{% endblock %}
+{% block title %} Watch Later List {% endblock %}
 
 {% block body %}
-
-
-
 
 {% if watchLaterList is not empty %}
 
@@ -54,8 +50,10 @@
 </table>
 {% else %}
 <p>
-<h3>You have no movies added to your watch later list, <a href="{{path('app_movie_explore')}}">check out</a> some of the
-    popular titles.</h3>
+<h3>You have no movies added to your watch later list,
+    <a href="{{path('app_movie_explore')}}">check out</a>
+    some of thepopular titles.
+</h3>
 </p>
 {% endif %}
 

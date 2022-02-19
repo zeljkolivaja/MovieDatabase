@@ -1,6 +1,7 @@
 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 {% if is_granted('FAVORITE_TRUE', userData) %}
 
+
 <a class="btn btn-danger" href="{{path('app_usermovie_removefavorite', {'slug': movie.slug})}}">Remove from
     favorites</a>
 
@@ -18,7 +19,7 @@
 
 <a class="btn btn-danger" href="{{path('app_usermovie_removewatchlater', {'slug': movie.slug})}}">Remove
     from
-    Watch Later list</a>
+    Watch Later List</a>
 
 {% else %}
 

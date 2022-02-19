@@ -35,13 +35,11 @@
             <td>
                 {{ counter }}
             </td>
-
             <td>
                 <a href="#">
                     {{ user.email }}
                 </a>
             </td>
-
             <td>
                 {% if user.firstName is not null and user.firstName is defined %}
                 {{ user.firstName }}
@@ -49,7 +47,6 @@
                 First Name not defined
                 {% endif %}
             </td>
-
             <td>
                 {% if user.lastName is not null and user.lastName is defined %}
                 {{ user.lastName }}

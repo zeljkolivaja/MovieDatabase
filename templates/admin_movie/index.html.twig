@@ -2,8 +2,8 @@
 
 {% block title %}Admin Movie{% endblock %}
 {% block body %}
-<br />
-<h3>Administer users</h3>
+
+<h3 class="top-custom-margin">Administer users</h3>
 <div>
     <p> Hello <b>{{app.user.getDisplayName}}</b>, we have <b>{{userCount}}</b> users registered, last registered user is
         <b>{{lastUser.getDisplayName}}</b>
@@ -17,12 +17,11 @@ Search Users by email, first name or last name
     <button class="btn btn-outline-success" type="submit">Search</button>
 </form>
 
-<br>
-<div>
+
+<div class="top-custom-margin">
     <a class="btn btn-primary" href="{{path('app_admin_movie_new')}}">Create New Movie</a>
-    <br />
-    <br />
-    <h3>Latest Movies:</h3>
+
+    <h3 class="top-custom-margin">Latest Movies:</h3>
     <table class="table table-striped">
         <thead>
             <tr>

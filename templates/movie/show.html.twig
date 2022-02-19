@@ -6,8 +6,7 @@
 
 {% block body %}
 
-
-<div class="card mb-3" style="max-width: 100%;">
+<div class="card mb-3 top-custom-margin">
 	<div class="row no-gutters">
 		<div class="col-md-4">
 			<a href="{{path('app_movie_show',{slug: movie.slug} )}}"><img src="{{asset('images/'~ movie.poster ~'')}}"
@@ -16,47 +15,48 @@
 		<div class="col-md-8">
 			<div class="card-body">
 				<h5 class="card-title">{{movie.title}}</h5>
-				<p class="card-text">{{movie.storyline}}</p>
-				<small class="text-muted">Categories :
-					{% for category in movie.categories %}
-					<span class="badge rounded-pill bg-light text-dark">{{category.name}}</span>
-					{% endfor %}
-				</small>
-				<br />
+				<p class="card-text"><em>{{movie.storyline}}</em></p>
+				<p><small class="text-muted"><b>Categories :</b>
+						{% for category in movie.categories %}
+						<span class="badge rounded-pill bg-light text-dark">{{category.name}}</span>
+						{% endfor %}
+					</small>
+				</p>
 
-				<small class="text-muted">Movie Personnel :
-					{% for personnel in movie.personnels %}
-					<span class="badge rounded-pill bg-light text-dark">
-						{{personnel.role}}:
-						{{personnel.person.firstName}}
-						{{personnel.person.lastName}}
-					</span>
-					{% endfor %}
 
-				</small>
+				<p><small class="text-muted"><b>Movie Personnel : </b>
+						{% for personnel in movie.personnels %}
+						<span class="badge rounded-pill bg-light text-dark">
+							{{personnel.role}}:
+							{{personnel.person.firstName}}
+							{{personnel.person.lastName}}
+						</span>
+						{% endfor %}
+					</small>
+				</p>
 
 				<p class="card-text">
 					{% if movie.releaseYear %}
-					<small class="text-muted">Release year :
+					<small class="text-muted"><b>Release year :</b>
 						{{movie.releaseYear|date('Y')}}</small>
 					{% else %}
-					<small class="text-muted">Release year : To be announced
+					<small class="text-muted"><b>Release year :</b> To be announced
 					</small>
 					{% endif %}
 				</p>
+
 				{% include 'movie/includes/rating.html.twig' %}
 				{% include 'movie/includes/adminEditDelLinks.html.twig' %}
 				{% include 'movie/includes/favoriteWatchListLinks.html.twig' %}
-
-
-
-
 
 			</div>
 		</div>
 	</div>
 </div>
 
+
+
+<h1>Image gallery</h1>
 
 
 
@@ -81,20 +81,27 @@
 </div>
 {% endif %}
 
-
+<hr>
 
 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 {% if is_granted('REVIEW_PUBLISHED', userData) %}
-My review
-</br>
-Rating: <b>{{userData.rating != null ? userData.rating : "not rated yet"}}</b>
 
-<br>
-Title : {{userData.reviewTitle}}
-<p>{{userData.review}}
+<p>
+<h1>My review</h1>
 </p>
-<p><a class="btn btn-danger" href="{{path('app_usermovie_deleteReview', {'slug': movie.slug})}}">Delete Review</a>
-	<a class="btn btn-secondary" href="{{path('app_usermovies_editReview', {'slug': movie.slug})}}">Edit Review</a>
+<p>
+<h5> Rating: {{userData.rating != null ? userData.rating : "please rate the movie"}}</h5>
+<h5> Title : {{userData.reviewTitle}}</h5>
+<em>{{userData.review}}</em>
+</p>
+
+<hr>
+
+<p>
+	<a class="btn btn-danger" href="{{path('app_usermovie_deleteReview', {'slug': movie.slug})}}">Delete
+		Review</a>
+	<a class="btn btn-secondary" href="{{path('app_usermovies_editReview', {'slug': movie.slug})}}">Edit
+		Review</a>
 </p>
 
 {% else %}
@@ -105,22 +112,20 @@ Title : {{userData.reviewTitle}}
 
 {% if pagination %}
 <h2>User reviews</h2>
-{% for userReview in pagination %}
-User: <b>{{userReview.user.getDisplayName}}</b> <br />
-Rating: <b>{{userReview.rating != null ? userReview.rating : "not rated yet"}}</b></br>
 
-<b>{{userReview.reviewTitle}}</b>
-</br>
-<p>{{userReview.review}}
+{% for userReview in pagination %}
+<div>User: <b>{{userReview.user.getDisplayName}}</b></div>
+Movie Rating: <b>{{userReview.rating != null ? userReview.rating : "not rated yet"}}</b>
+<div><b>{{userReview.reviewTitle}}</b></div>
+<p><em>{{userReview.review}}</em>
 </p>
+<hr>
 {% endfor %}
+
 {{pagerfanta(pagination)}}
+
 {% else %}
 <h2>No reviews yet, be the first one to review this Title!</h2>
 {% endif %}
-
-
-
-
 
 {% endblock %}

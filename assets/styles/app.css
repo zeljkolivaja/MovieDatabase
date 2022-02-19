@@ -12,6 +12,23 @@
      display: block;
  }
 
- .pagination-custom {
-     margin-top: 20px;
+ .newest-movies {
+     padding-top: 2%;
+     padding-bottom: 2%;
+ }
+
+ .page-link {
+     color: black;
+ }
+
+ .page-item.active .page-link {
+     background-color: #0d78fd;
+ }
+
+ .top-custom-margin {
+     margin-top: 2%;
+ }
+
+ .custom-block {
+     display: block;
  }

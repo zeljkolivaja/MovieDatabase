@@ -6,8 +6,7 @@ MovieDB homepage
 
 {% block body %}
 
-<div style="padding-top: 2%;">
-
+<div class="newest-movies">
 	<h3>Newest movies</h3>
 	<h5>Check out the newest releases<h5>
 </div>
@@ -18,27 +17,31 @@ MovieDB homepage
 			{% for movie in pagination %}
 			<div class="col-md-12 col-lg-3">
 				<div class="card">
-					<a href="{{path('app_movie_show',{slug: movie.slug} )}}"><img
-							src="{{asset('images/'~ movie.poster ~'')}}" class="card-img-top" alt="..."></a>
+					<a href="{{path('app_movie_show',{slug: movie.slug} )}}">
+						<img src="{{asset('images/'~ movie.poster ~'')}}" class="card-img-top" alt="...">
+					</a>
 
 					<div class="card-body">
 						<h5 class="card-title">{{movie.title}}</h5>
 						<p class="card-text">{{movie.storyline|u.truncate(90,'...',false)}}</p>
 						<p class="card-text">
-							<small class="text-muted">Categories :
+							<small class="text-muted"> <b>Categories :</b>
 								{% for category in movie.categories %}
 								<span class="badge rounded-pill bg-light text-dark">{{category.name}}</span>
 								{% endfor %}
 							</small>
-							<br />
 
 							{% if movie.releaseYear %}
-							<small class="text-muted">Release year :
+						<p>
+							<small class="text-muted"> <b>Release year :</b>
 								{{movie.releaseYear|date('Y')}}</small>
-							{% else %}
+						</p>
+						{% else %}
+						<p>
 							<small class="text-muted">Release year : To be announced
 							</small>
-							{% endif %}
+						</p>
+						{% endif %}
 						</p>
 
 						{% include 'movie/includes/adminEditDelLinks.html.twig' %}
@@ -51,7 +54,7 @@ MovieDB homepage
 	</div>
 </div>
 
-<div class="pagination-custom">
+<div class="top-custom-margin">
 	{{pagerfanta(pagination)}}
 </div>
 
