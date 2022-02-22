@@ -31,11 +31,11 @@ class AppFixtures extends Fixture
         ]);
 
 
-        //create 10 categories(movie genres)
+        //create 9 categories(movie genres)
         CategoryFactory::createMany(9);
 
         //create 100 movies, connect each movie to random amount of categories(min 1 category , max 5)
-        //create two images(just random strings for now) for each movie
+        //select five images for each movie
         MovieFactory::createMany(50, function () {
             return [
                 'categories' => CategoryFactory::randomRange(1, 3),

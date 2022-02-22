@@ -35,9 +35,14 @@ final class ImageFactory extends ModelFactory
         // TODO inject services if required (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services)
     }
 
+
+    use ImageScanTrait;
+
     protected function getDefaults(): array
     {
-        $exampleImg = scandir(__DIR__ . '/../' . '../public/images/');
+        //using ImageScanTrait to reuse logic and to scan directory for images only once;
+        $exampleImg = $this->scanDirImages();
+
         $exampleImg = (array_filter($exampleImg, function ($var) {
             return (stripos($var, 'img') !== false);
         }));

@@ -29,13 +29,15 @@ use Zenstruck\Foundry\Proxy;
  */
 final class MovieFactory extends ModelFactory
 {
+
+    use ImageScanTrait;
+
     public function __construct()
     {
         parent::__construct();
 
         // TODO inject services if required (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services)
     }
-
 
     public function notReleased(): self
     {
@@ -51,11 +53,11 @@ final class MovieFactory extends ModelFactory
     {
         $PG = ['G', 'PG', 'PG-13', 'R', 'NC-17'];
 
-        $exampleImg = scandir(__DIR__ . '/../' . '../public/images/');
-        $exampleImg = (array_filter($exampleImg, function ($var) {
-            return (stripos($var, 'poster') !== false);
-        }));
 
+
+        //using ImageScanTrait to reuse logic and to scan directory for images only once;
+        //pasing argument "poster" to have only images containing posters returned
+        $exampleImg = $this->scanDirImages("poster");
 
         return [
             'title' => self::faker()->realText(20),
