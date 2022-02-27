@@ -337,6 +337,11 @@ class Movie
         return $this->poster;
     }
 
+    public function getPosterSafe()
+    {
+        return $this->poster ?: 'poster1.jpg';
+    }
+
     public function setPoster(string $poster): self
     {
         $this->poster = $poster;
