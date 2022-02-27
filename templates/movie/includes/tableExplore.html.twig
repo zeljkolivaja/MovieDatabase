@@ -1,0 +1,47 @@
+<div>
+    <h3>
+        {{title}}
+    </h3>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">
+                    #
+                </th>
+                <th scope="col">
+                    Movie Name
+                </th>
+                <th scope="col">
+                    Number of votes
+                </th>
+                <th scope="col">
+                    User rating
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set counter = 0 %}
+            {% for movie in movies %}
+            {% set counter = counter + 1 %}
+            <tr>
+                <td>
+                    {{ counter }}
+                </td>
+                <td>
+                    <a href="{{ path('app_movie_show',{slug: movie.slug} ) }}" class="text-decoration-none text-reset">
+                        {{ movie.title }}
+                    </a>
+                </td>
+                <td>
+                    {{ movie.totalVotes }}
+                </td>
+                <td>
+                    {{ (movie.rating / movie.totalVotes)| number_format(2) }}
+                </td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>

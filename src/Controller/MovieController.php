@@ -48,11 +48,13 @@ class MovieController extends AbstractController
     public function exploreMovies(VideoRepository $videos): Response
     {
         //TODO most voted movies/ best rated movies, best rated movies by genre, newest movies
-        $movies = $this->movieRepository->findMostVotedMovies(10);
+        $mostVotedMovies = $this->movieRepository->findMostVotedMovies(10);
+        $bestRatedMovies = $this->movieRepository->findBestRatedMovies(10);
         $trailers =  $videos->findLatestVideos(4);
 
         return $this->render('movie/explore.html.twig', [
-            'movies' => $movies,
+            'mostVotedMovies' => $mostVotedMovies,
+            'bestRatedMovies' => $bestRatedMovies,
             'trailers' => $trailers
         ]);
     }

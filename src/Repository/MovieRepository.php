@@ -73,6 +73,17 @@ class MovieRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findBestRatedMovies($numberOfresults)
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        return $this->isReleased($qb)
+            ->orderBy('m.rating / m.totalVotes', 'DESC')
+            ->setMaxResults($numberOfresults)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function search($q): ?array
     {
         return $this->createQueryBuilder('m')
