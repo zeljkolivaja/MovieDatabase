@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Movie;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -12,6 +13,7 @@ class MovieFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        //validation with assert on Movie entity
         $builder
             ->add('title', null, [
                 'translation_domain' => false,
@@ -33,6 +35,10 @@ class MovieFormType extends AbstractType
                 'translation_domain' => false,
                 'help' => 'Optional, choose one or more categories',
 
+            ])
+            ->add('save', SubmitType::class, [
+                'attr' => ['class' => 'btn btn-success'],
+                'label' => 'Create Movie',
             ]);
     }
 

@@ -17,6 +17,10 @@ trait ImageScanTrait
                 $this->images = (array_filter($this->images, function ($var) {
                     return (stripos($var, 'poster') !== false);
                 }));
+            } elseif ($imgType === "img") {
+                $this->images = (array_filter($this->images, function ($var) {
+                    return (stripos($var, 'img') !== false);
+                }));
             }
         }
 

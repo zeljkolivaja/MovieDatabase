@@ -28,6 +28,8 @@ use Zenstruck\Foundry\Proxy;
  */
 final class ImageFactory extends ModelFactory
 {
+    use ImageScanTrait;
+
     public function __construct()
     {
         parent::__construct();
@@ -36,16 +38,11 @@ final class ImageFactory extends ModelFactory
     }
 
 
-    use ImageScanTrait;
 
     protected function getDefaults(): array
     {
         //using ImageScanTrait to reuse logic and to scan directory for images only once;
-        $exampleImg = $this->scanDirImages();
-
-        $exampleImg = (array_filter($exampleImg, function ($var) {
-            return (stripos($var, 'img') !== false);
-        }));
+        $exampleImg = $this->scanDirImages("img");
 
         return [
             // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
