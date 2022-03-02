@@ -1,0 +1,63 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Movies in {{categoryName}}
+{% endblock %}
+
+{% block body %}
+
+<h3>
+    Movies in {{categoryName}}
+</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">
+                #
+            </th>
+            <th scope="col">
+                Movie Name
+            </th>
+            <th scope="col">
+                Number of votes
+            </th>
+            <th scope="col">
+                User rating
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% set counter = 0 %}
+            {% for movie in movies %}
+            {% set counter = counter + 1 %}
+
+            <td>
+                {{ counter }}
+            </td>
+
+            <td>
+                <a href="{{ path('app_movie_show',{slug: movie.slug} ) }}">
+                    {{ movie.title }}
+                </a>
+            </td>
+
+            <td>
+                {{ movie.totalVotes }}
+            </td>
+
+            <td>
+                {% if movie.rating is not null %}
+                {{ (movie.rating / movie.totalVotes)| number_format(2) }}
+                {% else %}
+                No rating yet
+                {% endif %}
+            </td>
+
+
+
+        </tr>
+    </tbody>
+    {% endfor %}
+</table>
+{% endblock %}

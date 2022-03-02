@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Category;
+use App\Repository\CategoryRepository;
 use App\Repository\MovieRepository;
 use App\Repository\VideoRepository;
 use App\Repository\UserMovieRepository;
@@ -56,6 +58,21 @@ class MovieController extends AbstractController
             'mostVotedMovies' => $mostVotedMovies,
             'bestRatedMovies' => $bestRatedMovies,
             'trailers' => $trailers
+        ]);
+    }
+
+
+    /**
+     * @Route("/movies/category/{slug}", name="app_movie_category")
+     */
+    public function getMoviesFromCategory(Category $category): Response
+    {
+        $movies = $category->getMovies();
+        $categoryName = $category->getName();
+
+        return $this->render('movie/exploreByCategory.html.twig', [
+            'categoryName' => $categoryName,
+            'movies' => $movies,
         ]);
     }
 
