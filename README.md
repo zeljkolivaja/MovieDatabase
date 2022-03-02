@@ -4,9 +4,11 @@ An app for learning the Symfony framework by trying to implement most of the fea
 Symfony 5 courses.
 
 ## About app
-[CLICK TO VIEW ERA DIAGRAM](ERA.png) 
+[CLICK TO VIEW ERA DIAGRAM](ERA.png)  
+[CLICK TO VIEW LIVE SITE](http://phpstack-372184-2435614.cloudwaysapps.com/)  
+admin credentials: admin@test.com | password: defaultPass
 
-```bash
+```aboutApp
 - seeding the database with dummy data by using Foundry bundle
 - Symfony Forms system implementation
 - usage of Symfony 5 security system, authentication, 
